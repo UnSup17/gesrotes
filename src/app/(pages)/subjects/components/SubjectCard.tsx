@@ -18,10 +18,7 @@ export default function SubjectCard({ id, title, program }: ISubjectCard) {
           Estado de la asignatura
         </button>
         <Link
-          href={{
-            pathname: "/subjects/shifts",
-            query: { subject: id },
-          }}
+          href={`/subjects/${id}/shifts`}
           className="bg-[#08743B] rounded-md px-2 py-1 h-full text-center flex place-items-center"
         >
           Gestionar asignatura

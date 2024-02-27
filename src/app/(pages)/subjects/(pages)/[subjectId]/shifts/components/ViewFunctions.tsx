@@ -1,5 +1,5 @@
+import { getTopLeftFunctions } from "@subjects/(pages)/[subjectId]/shifts/util/Functions";
 import { Fragment } from "react";
-import { getTopLeftFunctions } from "../util/Functions";
 
 export default function ViewFunctions() {
   const topLeftFunctions = getTopLeftFunctions();

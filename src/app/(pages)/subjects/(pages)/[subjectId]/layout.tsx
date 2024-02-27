@@ -1,9 +1,8 @@
 "use client";
 
-import { redirect, usePathname, useSearchParams } from "next/navigation";
-import { getSubjectMenus } from "../util/subjects";
+import { getSubjectMap, getSubjectMenus } from "@subjects/util/subjects";
 import Link from "next/link";
-import { Fragment } from "react";
+import { redirect, usePathname } from "next/navigation";
 
 export interface ISubjectMenu {
   label: string;
@@ -11,23 +10,25 @@ export interface ISubjectMenu {
 }
 export default function SubjectSelectedLayout({
   children,
-}: Readonly<{
+  params,
+}: {
   children: React.ReactNode;
-}>) {
+  params: {
+    subjectId: number;
+  };
+}) {
   const pathname = usePathname();
-  const subjectParam = useSearchParams().get("subject");
-  if (!subjectParam) redirect("/subjects");
-  const menus = getSubjectMenus();
+  if (!getSubjectMap()[params.subjectId]) redirect("/subjects");
+  if (!params.subjectId) redirect("/");
+
+  const menus = getSubjectMenus(params.subjectId);
   return (
     <section className="flex flex-col h-full">
       <section className={`pb-2 grid grid-flow-col grid-cols-${menus.length}`}>
         {menus.map((menu, index) => (
           <div key={index} className="text-center">
             <Link
-              href={{
-                pathname: menu.to,
-                query: { subject: subjectParam },
-              }}
+              href={menu.to}
               className={`px-12 pt-4 pb-6 ${
                 pathname === menu.to && "bg-[#F7F7F7] rounded-t-3xl"
               }`}

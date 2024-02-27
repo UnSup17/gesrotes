@@ -1,7 +1,5 @@
-"use client";
-
+import ViewFunctions from "@subjects/(pages)/[subjectId]/shifts/components/ViewFunctions";
 import { Fragment } from "react";
-import ViewFunctions from "./components/ViewFunctions";
 
 export default function ShiftsPage() {
   return (
