@@ -4,7 +4,7 @@ import { Fragment } from "react";
 export default function ShiftsPage() {
   return (
     <Fragment>
-      <div className="py-8 px-4 border flex">
+      <div className="py-4 pl-4 flex">
         <ViewFunctions />
       </div>
       <div className="">b</div>
