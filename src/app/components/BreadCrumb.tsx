@@ -12,7 +12,9 @@ export default function BreadCrumb() {
   let breadCrumb = "/";
   return (
     <div className="flex items-center gap-2">
-      <Image src="/svg/home.svg" alt="logo" width={30} height={30} />
+      <Link href={"/subjects"}>
+        <Image src="/svg/home.svg" alt="homeLink" width={30} height={30} />
+      </Link>
       {pathname.map((item, index) => {
         breadCrumb += item + "/";
         const isDynamicRoute = !isNaN(parseInt(item));
