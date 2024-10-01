@@ -1,46 +1,40 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { IEnumImage } from "../model/EnumImage";
 
 interface ISearchBar {
+  searchParam: string;
+  image: IEnumImage;
   placeholder: string;
-  timeOut: number;
   onSearch: (searchText: string) => void;
 }
 export default function SearchBar({
+  searchParam,
+  image,
   placeholder,
-  timeOut,
   onSearch,
 }: ISearchBar) {
-  const [searchText, setSearchText] = useState("");
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      onSearch(searchText);
-    }, timeOut);
-    return () => clearTimeout(timer);
-  }, [searchText, onSearch, timeOut]);
-
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(event.target.value);
+    onSearch(event.target.value);
   };
 
   return (
-    <div className="flex place-content-center">
-      <div className="flex px-4 py-1 w-1/2 border-2 rounded-full bg-white">
+    <div className="relative">
+      <input
+        type="text"
+        className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        placeholder={placeholder}
+        value={searchParam}
+        onChange={handleChange}
+      />
+      <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
         <Image
-          alt="profile_photo"
-          src={"/svg/searchLens.svg"}
+          className="mx-auto"
+          alt={image.ariaLabel}
+          src={image.src}
           width={20}
           height={20}
-        />
-        <input
-          className="ml-2 w-full"
-          type="text"
-          placeholder={placeholder}
-          value={searchText}
-          onChange={handleChange}
         />
       </div>
     </div>

@@ -1,12 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
+import { IEnumImage } from "../model/EnumImage";
 
 export interface ILateralMenu {
   menus: {
     menuLabel: string;
     items: {
-      iconRoute: string;
-      itemLabel: string;
+      iconRoute: IEnumImage;
       redirectUrl: string;
     }[];
   }[];
@@ -25,17 +25,17 @@ export default function LateralMenu({ menus }: ILateralMenu) {
                 <label className="font-semibold">{menu.menuLabel}</label>
                 {menu.items.map((item) => (
                   <Link
-                    key={item.itemLabel}
+                    key={item.iconRoute.ariaLabel}
                     href={item.redirectUrl}
                     className="flex items-center gap-2 p-2 hover:bg-[#EEEEEE]"
                   >
                     <Image
-                      src={item.iconRoute}
+                      src={item.iconRoute.src}
                       width={30}
                       height={30}
-                      alt={`image_${item.itemLabel}`}
+                      alt={item.iconRoute.ariaLabel}
                     />
-                    <p>{item.itemLabel}</p>
+                    <p>{item.iconRoute.ariaLabel}</p>
                   </Link>
                 ))}
               </section>
