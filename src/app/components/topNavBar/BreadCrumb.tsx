@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { chooseLabelForDynamicRoute, translator } from "../util/translator";
+import { chooseLabelForDynamicRoute, translator } from "../../util/translator";
 
 export default function BreadCrumb() {
   const pathname = usePathname()

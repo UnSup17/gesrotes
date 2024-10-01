@@ -1,5 +1,5 @@
 import LateralMenu from "@/app/components/LateralMenu";
-import TopNavBar from "@/app/components/TopNavBar";
+import TopNavBar from "@/app/components/topNavBar";
 import { getMenuOptions } from "@/app/util/lateralMenuOptions";
 
 export default function Layout({
