@@ -1,6 +1,7 @@
 "use client";
 
 import Combobox from "@/app/components/ComboBox";
+import DatePicker from "@/app/components/Datepicker";
 import SearchBar from "@/app/components/SearchBar";
 import { EnumImage } from "@/app/model/EnumImage";
 import { useState } from "react";
@@ -26,13 +27,14 @@ export default function Parametrizer() {
           onSearch={handleSearch}
         />
       </div>
-      <div className="w-1/2">
+      <div className="w-1/2 flex space-x-2 mx-auto">
         <Combobox
           className="w-1/4"
           options={["Opcion 1", "Opcion 2"]}
           handleSelect={handleSelect}
           placeholder={"Combobox"}
         />
+        <DatePicker selectDay={true} selectMonth={true} selectYear={true} />
       </div>
     </div>
   );
