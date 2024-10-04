@@ -1,62 +1,47 @@
-import { ISubjectMenu } from "../(pages)/layout";
-import { ISubjectCard } from "../components/SubjectCard";
+import { ISubjectMenu } from "@subjects/(pages)/[subjectId]/layout";
+import { ISubjectCard } from "@subjects/components/SubjectCard";
 
-export const getSubjectList = (): ISubjectCard[] => {
-  return [
-    {
+export const getSubjectMap = (): { [key: string]: ISubjectCard } => {
+  return {
+    "1": {
       id: 1,
       title: "Cuidado de enfermería en salud mental",
       program: "Enfermería"
     },
-    {
+    "2": {
       id: 2,
       title: "Cuidado al adulto mayor",
       program: "Enfermería"
     },
-    {
+    "3": {
       id: 3,
       title: "Salud para deportistas",
       program: "Enfermería"
     },
-    {
-      id: 3,
-      title: "Cuidado de enfermería en salud mental",
-      program: "Enfermería"
-    },
-    {
-      id: 4,
-      title: "Cuidado al adulto mayor",
-      program: "Enfermería"
-    },
-    {
-      id: 5,
-      title: "Salud para deportistas",
-      program: "Enfermería"
-    },
-  ]
+  }
 }
 
-export const getSubjectMenus = (): ISubjectMenu[] => {
+export const getSubjectMenus = (subjectId: number): ISubjectMenu[] => {
   return [
     {
       label: "Estudiantes",
-      to: "/subjects/students"
+      to: `/subjects/${subjectId}/students`
     },
     {
       label: "Profesores",
-      to: "/subjects/teachers"
+      to: `/subjects/${subjectId}/teachers`
     },
     {
       label: "Rotes",
-      to: "/subjects/rotations"
+      to: `/subjects/${subjectId}/rotations`
     },
     {
       label: "Turnos",
-      to: "/subjects/shifts"
+      to: `/subjects/${subjectId}/shifts`
     },
     {
       label: "Documentos",
-      to: "/subjects/documents"
+      to: `/subjects/${subjectId}/documents`
     },
   ]
 }

@@ -1,38 +1,35 @@
 import { ILateralMenu } from "@/app/components/LateralMenu";
+import { EnumImage } from "../model/EnumImage";
 
 export const getMenuOptions = (): ILateralMenu => {
   return {
     menus: [
       {
-        menuLabel: 'Gestión',
+        menuLabel: "Gestión",
         items: [
           {
-            iconRoute: '/svg/studentCheck.svg',
-            itemLabel: 'Verificar Estudiantes',
-            redirectUrl: '/studentCheck'
+            iconRoute: EnumImage.getImage("studentCheck"),
+            redirectUrl: "/studentCheck",
           },
           {
-            iconRoute: '/svg/docentCheck.svg',
-            itemLabel: 'Verificar Docentes',
-            redirectUrl: '/docentCheck'
+            iconRoute: EnumImage.getImage("docentCheck"),
+            redirectUrl: "/docentCheck",
           },
           {
-            iconRoute: '/svg/subject.svg',
-            itemLabel: 'Asignaturas',
-            redirectUrl: '/subjects'
+            iconRoute: EnumImage.getImage("subject"),
+            redirectUrl: "/subjects",
           },
-        ]
+        ],
       },
       {
-        menuLabel: 'Mi Perfil',
+        menuLabel: "Mi Perfil",
         items: [
           {
-            iconRoute: '/svg/configuration.svg',
-            itemLabel: 'Configuración',
-            redirectUrl: '/configuration'
+            iconRoute: EnumImage.getImage("configuration"),
+            redirectUrl: "/configuration",
           },
-        ]
+        ],
       },
-    ]
-  }
-}
+    ],
+  };
+};
