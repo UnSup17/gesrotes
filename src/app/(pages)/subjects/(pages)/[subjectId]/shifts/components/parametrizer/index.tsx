@@ -34,7 +34,9 @@ export default function Parametrizer() {
           handleSelect={handleSelect}
           placeholder={"Combobox"}
         />
-        <DatePicker selectDay={true} selectMonth={true} selectYear={true} />
+        <div className="relative">
+          <DatePicker selectDay={false} selectMonth={true} selectYear={true} />
+        </div>
       </div>
     </div>
   );

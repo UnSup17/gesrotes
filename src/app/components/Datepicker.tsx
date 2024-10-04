@@ -54,7 +54,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   const years = Array.from({ length: 12 }, (_, i) => yearRange - 6 + i); // Matriz de años alrededor del año actual
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center absolute">
       {/* Mostrar año y mes seleccionados y permitir volver a ellos */}
       {selectedYear && (
         <div className="flex space-x-4 mb-4">
@@ -75,7 +75,11 @@ const DatePicker: React.FC<DatePickerProps> = ({
             {years.map((year) => (
               <button
                 key={year}
-                className={`p-2 rounded ${year === selectedYear ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+                className={`p-2 rounded ${
+                  year === selectedYear
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-200"
+                }`}
                 onClick={() => handleYearSelect(year)}
               >
                 {year}
@@ -85,8 +89,18 @@ const DatePicker: React.FC<DatePickerProps> = ({
 
           {/* Botones para cambiar el rango de años */}
           <div className="flex space-x-4 mt-4">
-            <button onClick={previousYearRange} className="px-4 py-2 bg-gray-300 rounded">Anterior</button>
-            <button onClick={nextYearRange} className="px-4 py-2 bg-gray-300 rounded">Siguiente</button>
+            <button
+              onClick={previousYearRange}
+              className="px-4 py-2 bg-gray-300 rounded"
+            >
+              Anterior
+            </button>
+            <button
+              onClick={nextYearRange}
+              className="px-4 py-2 bg-gray-300 rounded"
+            >
+              Siguiente
+            </button>
           </div>
         </div>
       )}
@@ -97,7 +111,11 @@ const DatePicker: React.FC<DatePickerProps> = ({
           {months.map((month, index) => (
             <button
               key={month}
-              className={`p-2 rounded ${index === selectedMonth ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
+              className={`p-2 rounded ${
+                index === selectedMonth
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200"
+              }`}
               onClick={() => handleMonthSelect(index)}
             >
               {month}
@@ -107,26 +125,38 @@ const DatePicker: React.FC<DatePickerProps> = ({
       )}
 
       {/* Day Selector */}
-      {selectYear && selectedYear && selectMonth && selectedMonth !== null && selectDay && (
-        <div>
-          <div className="grid grid-cols-7 gap-2 mt-4 text-center">
-            {["L", "M", "X", "J", "V", "S", "D"].map((dayOfWeek, idx) => (
-              <div key={idx} className="font-bold">{dayOfWeek}</div>
-            ))}
+      {selectYear &&
+        selectedYear &&
+        selectMonth &&
+        selectedMonth !== null &&
+        selectDay && (
+          <div>
+            <div className="grid grid-cols-7 gap-2 mt-4 text-center">
+              {["L", "M", "X", "J", "V", "S", "D"].map((dayOfWeek, idx) => (
+                <div key={idx} className="font-bold">
+                  {dayOfWeek}
+                </div>
+              ))}
 
-            {/* Renderizar los días con días nulos para mantener el formato */}
-            {paddedDays.map((day, idx) => (
-              <button
-                key={idx}
-                className={`p-2 rounded ${day === selectedDay ? 'bg-blue-500 text-white' : day ? 'bg-gray-200' : 'invisible'}`}
-                onClick={() => day && handleDaySelect(day)}
-              >
-                {day || ''}
-              </button>
-            ))}
+              {/* Renderizar los días con días nulos para mantener el formato */}
+              {paddedDays.map((day, idx) => (
+                <button
+                  key={idx}
+                  className={`p-2 rounded ${
+                    day === selectedDay
+                      ? "bg-blue-500 text-white"
+                      : day
+                      ? "bg-gray-200"
+                      : "invisible"
+                  }`}
+                  onClick={() => day && handleDaySelect(day)}
+                >
+                  {day || ""}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-      )}
+        )}
     </div>
   );
 };
