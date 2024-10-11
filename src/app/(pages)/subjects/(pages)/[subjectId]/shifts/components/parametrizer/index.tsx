@@ -1,6 +1,5 @@
 "use client";
 
-import Combobox from "@/app/components/ComboBox";
 import DatePicker from "@/app/components/Datepicker";
 import SearchBar from "@/app/components/SearchBar";
 import { EnumImage } from "@/app/model/EnumImage";
@@ -27,17 +26,15 @@ export default function Parametrizer() {
           onSearch={handleSearch}
         />
       </div>
-      <div className="w-1/2 flex space-x-2 mx-auto">
-        <Combobox
-          className="w-1/4"
-          options={["Opcion 1", "Opcion 2"]}
-          handleSelect={handleSelect}
-          placeholder={"Combobox"}
+      <div className="relative w-1/2">
+        <DatePicker
+          selectDay={true}
+          selectMonth={true}
+          selectYear={true}
+          className="w-full text-sm"
         />
-        <div className="relative">
-          <DatePicker selectDay={false} selectMonth={true} selectYear={true} />
-        </div>
       </div>
     </div>
   );
+  
 }
