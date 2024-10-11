@@ -5,30 +5,55 @@ interface DatePickerProps {
   selectYear?: boolean;
   selectMonth?: boolean;
   selectDay?: boolean;
+  className?: string;
 }
 
 const DatePicker: React.FC<DatePickerProps> = ({
   selectYear = true,
   selectMonth = true,
-  selectDay = true
+  selectDay = true,
+  className,
 }) => {
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [yearRange, setYearRange] = useState<number>(new Date().getFullYear());
 
-  const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+  const months = [
+    "Enero",
+    "Febrero",
+    "Marzo",
+    "Abril",
+    "Mayo",
+    "Junio",
+    "Julio",
+    "Agosto",
+    "Septiembre",
+    "Octubre",
+    "Noviembre",
+    "Diciembre",
+  ];
 
   // Obtener el primer día del mes y el número de días en el mes
-  const getFirstDayOfMonth = (year: number, month: number): number => new Date(year, month, 1).getDay();
-  const getDaysInMonth = (year: number, month: number): number => new Date(year, month + 1, 0).getDate();
+  const getFirstDayOfMonth = (year: number, month: number): number =>
+    new Date(year, month, 1).getDay();
+  const getDaysInMonth = (year: number, month: number): number =>
+    new Date(year, month + 1, 0).getDate();
 
-  const daysInMonth = selectedYear !== null && selectedMonth !== null ? getDaysInMonth(selectedYear, selectedMonth) : 0;
-  const firstDayOfMonth = selectedYear !== null && selectedMonth !== null ? getFirstDayOfMonth(selectedYear, selectedMonth) : 0;
+  const daysInMonth =
+    selectedYear !== null && selectedMonth !== null
+      ? getDaysInMonth(selectedYear, selectedMonth)
+      : 0;
+  const firstDayOfMonth =
+    selectedYear !== null && selectedMonth !== null
+      ? getFirstDayOfMonth(selectedYear, selectedMonth)
+      : 0;
 
   // Crear matriz de días del mes
   const daysArray = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-  const paddedDays: (number | null)[] = Array(firstDayOfMonth).fill(null).concat(daysArray);
+  const paddedDays: (number | null)[] = Array(firstDayOfMonth)
+    .fill(null)
+    .concat(daysArray);
 
   // Manejo de selección
   const handleYearSelect = (year: number) => {
@@ -44,7 +69,9 @@ const DatePicker: React.FC<DatePickerProps> = ({
 
   const handleDaySelect = (day: number) => {
     setSelectedDay(day);
-    console.log(`Selected Date: ${selectedYear}-${months[selectedMonth!]}-${day}`);
+    console.log(
+      `Selected Date: ${selectedYear}-${months[selectedMonth!]}-${day}`
+    );
   };
 
   // Cambiar el rango de años mostrado (paginación de años)
@@ -54,7 +81,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   const years = Array.from({ length: 12 }, (_, i) => yearRange - 6 + i); // Matriz de años alrededor del año actual
 
   return (
-    <div className="flex flex-col items-center absolute">
+    <div className={`flex flex-col items-center absolute ${className}`}>
       {/* Mostrar año y mes seleccionados y permitir volver a ellos */}
       {selectedYear && (
         <div className="flex space-x-4 mb-4">
