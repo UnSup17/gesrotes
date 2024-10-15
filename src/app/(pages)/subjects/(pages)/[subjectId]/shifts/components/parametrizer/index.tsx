@@ -28,7 +28,7 @@ export default function Parametrizer() {
       </div>
       <div className="relative w-1/2">
         <DatePicker
-          selectDay={true}
+          selectDay={false}
           selectMonth={true}
           selectYear={true}
           className="w-full text-sm"
