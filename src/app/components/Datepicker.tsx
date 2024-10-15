@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 // Definir las propiedades del componente
 interface DatePickerProps {
@@ -18,6 +18,13 @@ const DatePicker: React.FC<DatePickerProps> = ({
   const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [yearRange, setYearRange] = useState<number>(new Date().getFullYear());
+
+  useEffect(() => {
+    const currentDate = new Date();
+    setSelectedYear(currentDate.getFullYear());
+    setSelectedMonth(currentDate.getMonth() + 1); // getMonth() devuelve 0-11, sumamos 1 para obtener 1-12
+    setSelectedDay(currentDate.getDate());
+  }, []);
 
   const months = [
     "Enero",
