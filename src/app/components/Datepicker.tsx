@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 
 // Definir las propiedades del componente
 interface DatePickerProps {
+  selectedDate: { year: number, month: number }
+  onSelectDate: (year: number, month: number) => void
   selectYear?: boolean;
   selectMonth?: boolean;
   selectDay?: boolean;
@@ -9,21 +11,20 @@ interface DatePickerProps {
 }
 
 const DatePicker: React.FC<DatePickerProps> = ({
+  selectedDate,
+  onSelectDate,
   selectYear = true,
   selectMonth = true,
   selectDay = true,
   className,
 }) => {
-  const [selectedYear, setSelectedYear] = useState<number | null>(null);
-  const [selectedMonth, setSelectedMonth] = useState<number | null>(null);
+  const [selectedYear, setSelectedYear] = useState<number | null>(selectedDate.year);
+  const [selectedMonth, setSelectedMonth] = useState<number | null>(selectedDate.month);
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [yearRange, setYearRange] = useState<number>(new Date().getFullYear());
 
   useEffect(() => {
-    const currentDate = new Date();
-    setSelectedYear(currentDate.getFullYear());
-    setSelectedMonth(currentDate.getMonth() + 1); // getMonth() devuelve 0-11, sumamos 1 para obtener 1-12
-    setSelectedDay(currentDate.getDate());
+    setSelectedDay(new Date().getDate());
   }, []);
 
   const months = [
@@ -72,6 +73,7 @@ const DatePicker: React.FC<DatePickerProps> = ({
   const handleMonthSelect = (monthIndex: number) => {
     setSelectedMonth(monthIndex);
     setSelectedDay(null); // Resetear día
+    onSelectDate(selectedYear as number, monthIndex + 1);
   };
 
   const handleDaySelect = (day: number) => {
@@ -109,11 +111,10 @@ const DatePicker: React.FC<DatePickerProps> = ({
             {years.map((year) => (
               <button
                 key={year}
-                className={`p-2 rounded ${
-                  year === selectedYear
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200"
-                }`}
+                className={`p-2 rounded ${year === selectedYear
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200"
+                  }`}
                 onClick={() => handleYearSelect(year)}
               >
                 {year}
@@ -145,11 +146,10 @@ const DatePicker: React.FC<DatePickerProps> = ({
           {months.map((month, index) => (
             <button
               key={month}
-              className={`p-2 rounded ${
-                index === selectedMonth
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200"
-              }`}
+              className={`p-2 rounded ${index === selectedMonth
+                ? "bg-blue-500 text-white"
+                : "bg-gray-200"
+                }`}
               onClick={() => handleMonthSelect(index)}
             >
               {month}
@@ -176,13 +176,12 @@ const DatePicker: React.FC<DatePickerProps> = ({
               {paddedDays.map((day, idx) => (
                 <button
                   key={idx}
-                  className={`p-2 rounded ${
-                    day === selectedDay
-                      ? "bg-blue-500 text-white"
-                      : day
+                  className={`p-2 rounded ${day === selectedDay
+                    ? "bg-blue-500 text-white"
+                    : day
                       ? "bg-gray-200"
                       : "invisible"
-                  }`}
+                    }`}
                   onClick={() => day && handleDaySelect(day)}
                 >
                   {day || ""}
