@@ -7,7 +7,7 @@ interface IParametrizer {
   parameters: IParameters;
   handleChangeParameters: (parameter: string, value: any) => void;
 }
-export default async function Parametrizer(
+export default function Parametrizer(
   { parameters, handleChangeParameters }: IParametrizer
 ) {
   const handleSearchStudent = (searchText: string) => {
