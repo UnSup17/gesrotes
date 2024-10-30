@@ -1,6 +1,6 @@
 "use client";
 
-import { getTopLeftFunctions } from "@subjects/(pages)/[subjectId]/shifts/util/Functions";
+import { getTopLeftFunctions } from "@/app/(pages)/subjects/(pages)/[subjectId]/shifts/util/shiftFunctions";
 
 export default function ViewFunctions() {
   const topLeftFunctions = getTopLeftFunctions();
