@@ -11,7 +11,7 @@ export default function Layout({
   return (
     <main className="flex min-h-screen max-h-screen bg-white">
       <LateralMenu menus={options.menus} />
-      <div className="flex flex-col xs:w-4/5 w-full py-8 pr-8">
+      <div className="flex flex-col xs:max-w-4/5 max-w-screen-2xl py-8 pr-8">
         <TopNavBar />
         <div className="mt-8 flex flex-col h-full">{children}</div>
       </div>
