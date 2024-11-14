@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 
 // Definir las propiedades del componente
 interface DatePickerProps {
@@ -10,7 +10,7 @@ interface DatePickerProps {
   className?: string;
 }
 
-const DatePicker: React.FC<DatePickerProps> = ({
+const DatePicker: FC<DatePickerProps> = ({
   selectedDate,
   onSelectDate,
   selectYear = true,
