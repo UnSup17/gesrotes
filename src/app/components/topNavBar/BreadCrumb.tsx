@@ -30,12 +30,14 @@ export default function BreadCrumb() {
               href={isDynamicRoute ? "#" : breadCrumb}
               className="text-[#000066] font-semibold font-sans text-lg hover:border-b-[#F58220] border-[#F7F7F7] border-b-2"
             >
-              {isDynamicRoute
-                ? chooseLabelForDynamicRoute(
-                    item,
-                    breadCrumb.slice(0, breadCrumb.length - 1)
-                  )
-                : translator[item] || item}
+              <p className="max-w-56 truncate">
+                {isDynamicRoute
+                  ? chooseLabelForDynamicRoute(
+                      item,
+                      breadCrumb.slice(0, breadCrumb.length - 1)
+                    )
+                  : translator[item] || item}
+              </p>
             </Link>
           </span>
         );
