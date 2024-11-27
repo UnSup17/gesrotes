@@ -1,31 +1,24 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
+import { useShiftContext } from "../(pages)/subjects/(pages)/[subjectId]/shifts/context/WeekContext";
 
 // Definir las propiedades del componente
 interface DatePickerProps {
-  selectedDate: { year: number, month: number }
-  onSelectDate: (year: number, month: number) => void
   selectYear?: boolean;
   selectMonth?: boolean;
-  selectDay?: boolean;
-  className?: string;
 }
 
 const DatePicker: FC<DatePickerProps> = ({
-  selectedDate,
-  onSelectDate,
   selectYear = true,
   selectMonth = true,
-  selectDay = true,
-  className,
 }) => {
-  const [selectedYear, setSelectedYear] = useState<number | null>(selectedDate.year);
-  const [selectedMonth, setSelectedMonth] = useState<number | null>(selectedDate.month);
-  const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [yearRange, setYearRange] = useState<number>(new Date().getFullYear());
 
-  useEffect(() => {
-    setSelectedDay(new Date().getDate());
-  }, []);
+  const {
+    weekParams,
+    handleWeekSelection,
+    handleNextWeek,
+    handlePreviousWeek,
+  } = useShiftContext();
 
   const months = [
     "Enero",
@@ -42,45 +35,16 @@ const DatePicker: FC<DatePickerProps> = ({
     "Diciembre",
   ];
 
-  // Obtener el primer día del mes y el número de días en el mes
-  const getFirstDayOfMonth = (year: number, month: number): number =>
-    new Date(year, month, 1).getDay();
-  const getDaysInMonth = (year: number, month: number): number =>
-    new Date(year, month + 1, 0).getDate();
-
-  const daysInMonth =
-    selectedYear !== null && selectedMonth !== null
-      ? getDaysInMonth(selectedYear, selectedMonth)
-      : 0;
-  const firstDayOfMonth =
-    selectedYear !== null && selectedMonth !== null
-      ? getFirstDayOfMonth(selectedYear, selectedMonth)
-      : 0;
-
-  // Crear matriz de días del mes
-  const daysArray = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-  const paddedDays: (number | null)[] = Array(firstDayOfMonth)
-    .fill(null)
-    .concat(daysArray);
-
   // Manejo de selección
   const handleYearSelect = (year: number) => {
-    setSelectedYear(year);
-    setSelectedMonth(null); // Resetear mes
-    setSelectedDay(null); // Resetear día
+    handleWeekSelection({ ...weekParams, date: { year, month: undefined } });
   };
 
   const handleMonthSelect = (monthIndex: number) => {
-    setSelectedMonth(monthIndex);
-    setSelectedDay(null); // Resetear día
-    onSelectDate(selectedYear as number, monthIndex + 1);
-  };
-
-  const handleDaySelect = (day: number) => {
-    setSelectedDay(day);
-    console.log(
-      `Selected Date: ${selectedYear}-${months[selectedMonth!]}-${day}`
-    );
+    handleWeekSelection({
+      ...weekParams,
+      date: { year: weekParams.date.year, month: monthIndex + 1 },
+    });
   };
 
   // Cambiar el rango de años mostrado (paginación de años)
@@ -90,107 +54,108 @@ const DatePicker: FC<DatePickerProps> = ({
   const years = Array.from({ length: 12 }, (_, i) => yearRange - 6 + i); // Matriz de años alrededor del año actual
 
   return (
-    <div className={`flex flex-col items-center absolute ${className}`}>
+    <>
+      {JSON.stringify(weekParams.date)}
       {/* Mostrar año y mes seleccionados y permitir volver a ellos */}
-      {selectedYear && (
-        <div className="flex space-x-4 mb-4">
-          <button onClick={() => setSelectedMonth(null)} className="underline">
-            {months[selectedMonth!] || "Seleccionar mes"}
+      {weekParams.date.year && (
+        <div className="w-full h-full flex place-content-evenly">
+          <button
+            onClick={() =>
+              handleWeekSelection({
+                ...weekParams,
+                date: { year: weekParams.date.year, month: undefined },
+              })
+            }
+          >
+            {months[weekParams.date.month!] || "Seleccionar mes"}
           </button>
-          <span>|</span>
-          <button onClick={() => setSelectedYear(null)} className="underline">
-            {selectedYear}
+          <span className="self-center">|</span>
+          <button
+            onClick={() =>
+              handleWeekSelection({
+                ...weekParams,
+                date: { year: undefined, month: undefined },
+              })
+            }
+          >
+            {weekParams.date.year}
+          </button>
+          <button
+            className="px-4 bg-slate-300 border rounded-xl"
+            onClick={handlePreviousWeek}
+          >
+            {"<"}
+          </button>
+          <button
+            className="px-4 bg-slate-300 border rounded-xl"
+            onClick={handleNextWeek}
+          >
+            {">"}
           </button>
         </div>
       )}
-
-      {/* Year Selector */}
-      {selectYear && !selectedYear && (
-        <div className="flex flex-col items-center">
-          <div className="grid grid-cols-3 gap-4">
-            {years.map((year) => (
-              <button
-                key={year}
-                className={`p-2 rounded ${year === selectedYear
-                  ? "bg-blue-500 text-white"
-                  : "bg-gray-200"
-                  }`}
-                onClick={() => handleYearSelect(year)}
-              >
-                {year}
-              </button>
-            ))}
-          </div>
-
-          {/* Botones para cambiar el rango de años */}
-          <div className="flex space-x-4 mt-4">
-            <button
-              onClick={previousYearRange}
-              className="px-4 py-2 bg-gray-300 rounded"
-            >
-              Anterior
-            </button>
-            <button
-              onClick={nextYearRange}
-              className="px-4 py-2 bg-gray-300 rounded"
-            >
-              Siguiente
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Month Selector */}
-      {selectYear && selectedYear && selectMonth && selectedMonth === null && (
-        <div className="grid grid-cols-4 gap-4 mt-4">
-          {months.map((month, index) => (
-            <button
-              key={month}
-              className={`p-2 rounded ${index === selectedMonth
-                ? "bg-blue-500 text-white"
-                : "bg-gray-200"
-                }`}
-              onClick={() => handleMonthSelect(index)}
-            >
-              {month}
-            </button>
-          ))}
-        </div>
-      )}
-
-      {/* Day Selector */}
-      {selectYear &&
-        selectedYear &&
-        selectMonth &&
-        selectedMonth !== null &&
-        selectDay && (
-          <div>
-            <div className="grid grid-cols-7 gap-2 mt-4 text-center">
-              {["L", "M", "X", "J", "V", "S", "D"].map((dayOfWeek, idx) => (
-                <div key={idx} className="font-bold">
-                  {dayOfWeek}
-                </div>
-              ))}
-
-              {/* Renderizar los días con días nulos para mantener el formato */}
-              {paddedDays.map((day, idx) => (
-                <button
-                  key={idx}
-                  className={`p-2 rounded ${day === selectedDay
-                    ? "bg-blue-500 text-white"
-                    : day
-                      ? "bg-gray-200"
-                      : "invisible"
+      <div className="relative">
+        <div className={"w-1/2 flex flex-col items-center absolute"}>
+          {/* Year Selector */}
+          {selectYear && !weekParams.date.year && (
+            <div className="flex flex-col items-center">
+              <div className="grid grid-cols-3 gap-4">
+                {years.map((year) => (
+                  <button
+                    key={year}
+                    className={`p-2 rounded ${
+                      year === weekParams.date.year
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200"
                     }`}
-                  onClick={() => day && handleDaySelect(day)}
+                    onClick={() => handleYearSelect(year)}
+                  >
+                    {year}
+                  </button>
+                ))}
+              </div>
+
+              {/* Botones para cambiar el rango de años */}
+              <div className="flex space-x-4 mt-4">
+                <button
+                  onClick={previousYearRange}
+                  className="px-4 py-2 bg-gray-300 rounded"
                 >
-                  {day || ""}
+                  Anterior
                 </button>
-              ))}
+                <button
+                  onClick={nextYearRange}
+                  className="px-4 py-2 bg-gray-300 rounded"
+                >
+                  Siguiente
+                </button>
+              </div>
             </div>
-          </div>
-        )}
-    </div>
+          )}
+          {/* Month Selector */}
+          {selectYear &&
+            weekParams.date.year &&
+            selectMonth &&
+            weekParams.date.month === undefined && (
+              <div className="grid grid-cols-4 gap-4 mt-4">
+                {months.map((month, index) => (
+                  <button
+                    key={month}
+                    className={`p-2 rounded ${
+                      index === weekParams.date.month
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200"
+                    }`}
+                    onClick={() => handleMonthSelect(index)}
+                  >
+                    {month}
+                  </button>
+                ))}
+              </div>
+            )}
+        </div>
+      </div>
+    </>
   );
 };
 
