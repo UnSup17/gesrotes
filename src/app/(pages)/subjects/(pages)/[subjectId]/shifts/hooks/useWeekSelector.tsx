@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { DayInfo, getCurrentWeekNumber, getWeekDaysOfYear } from "../lib/week";
+import {
+  DayInfo,
+  getCurrentWeekNumber,
+  getWeekDaysOfYear,
+  getWeeksInYear,
+} from "../util/weekUtils";
 
 export interface IWeekSelector {
   date: {
@@ -47,56 +52,58 @@ export const useWeekSelector = () => {
   }, []);
 
   const handleWeekSelection = ({ date, weekNumber }: IWeekSelectorHandler) => {
+    console.log(date, weekNumber);
     if (!date || date.year === undefined || date.month === undefined) {
       const response = getWeekDaysOfYear();
       setWeekInfo(response.week);
       setWeekParams({
         date: {
-          year: undefined,
-          month: undefined,
+          year: date.year,
+          month: date.month,
+        },
+        weekNumber,
+        weeksInYear: response.weeksInYear,
+      });
+    } else {
+      let response = getWeekDaysOfYear(date.year, weekNumber);
+      setWeekInfo(response.week);
+      setWeekParams({
+        date: {
+          year: response.year,
+          month: response.month,
         },
         weekNumber,
         weeksInYear: response.weeksInYear,
       });
     }
-
-    let response = getWeekDaysOfYear(date.year, weekNumber);
-    setWeekInfo(response.week);
-    setWeekParams({
-      date: {
-        year: response.year,
-        month: response.month,
-      },
-      weekNumber,
-      weeksInYear: response.weeksInYear,
-    });
   };
 
-  const handleNextWeek = () => {
-    // Comprobar si la semana actual es la última semana del año
-    console.log(weekParams.weekNumber + 1, weekParams.weeksInYear);
-    if (weekParams.weekNumber + 1 >= weekParams.weeksInYear)
+  const navigateWeek = (offset: number) => {
+    const newWeekNumber = weekParams.weekNumber + offset;
+    if (newWeekNumber < 0) {
+      const previousYear = (weekParams.date.year as number) - 1;
+      const previousWeeksInYear = getWeeksInYear(previousYear);
       handleWeekSelection({
-        ...weekParams,
-        date: {
-          year: (weekParams.date.year as number) + 1,
-          month: 0,
-        },
+        date: { year: previousYear, month: 11 },
+        weekNumber: previousWeeksInYear - 1,
+      });
+    } else if (newWeekNumber >= weekParams.weeksInYear) {
+      const nextYear = (weekParams.date.year as number) + 1;
+      handleWeekSelection({
+        date: { year: nextYear, month: 0 },
         weekNumber: 0,
       });
-    else
+    } else {
       handleWeekSelection({
         ...weekParams,
-        weekNumber: weekParams.weekNumber + 1,
+        weekNumber: newWeekNumber,
       });
+    }
   };
 
-  const handlePreviousWeek = () => {
-    handleWeekSelection({
-      ...weekParams,
-      weekNumber: weekParams.weekNumber - 1,
-    });
-  };
+  // Reutiliza la lógica
+  const handleNextWeek = () => navigateWeek(1);
+  const handlePreviousWeek = () => navigateWeek(-1);
 
   return {
     weekInfo,
