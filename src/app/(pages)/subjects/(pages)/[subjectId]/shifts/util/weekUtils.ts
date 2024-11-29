@@ -6,6 +6,24 @@ export interface DayInfo {
   label: string;
 }
 
+const weeksInYearCache = new Map<number, number>();
+
+function getWeeksInYear(year: number): number {
+  if (weeksInYearCache.has(year)) {
+    return weeksInYearCache.get(year)!;
+  }
+
+  const lastDayOfYear = new Date(year, 11, 31);
+  const firstSunday = getFirstSundayForYear(year);
+  const totalDays = Math.floor(
+    (lastDayOfYear.getTime() - firstSunday.getTime()) / (1000 * 60 * 60 * 24)
+  );
+  const weeks = Math.floor((totalDays + 1) / 7);
+
+  weeksInYearCache.set(year, weeks);
+  return weeks;
+}
+
 // Función auxiliar para generar un ID único para cada día
 function generateDayId(year: number, month: number, day: number): string {
   return `${year}${month.toString().padStart(2, "0")}${day
@@ -24,35 +42,41 @@ function getFirstSundayForYear(year: number): Date {
 
 // Función para obtener el inicio de una semana específica del año
 function getStartOfWeek(year: number, weekNumber: number): Date {
+  // Manejo de semanas negativas
+  while (weekNumber < 0) {
+    year -= 1;
+    const weeksInPrevYear = getWeeksInYear(year);
+    weekNumber += weeksInPrevYear;
+  }
+
+  // Manejo de semanas mayores al total en el año
+  const weeksInYear = getWeeksInYear(year);
+  while (weekNumber >= weeksInYear) {
+    weekNumber -= weeksInYear;
+    year += 1;
+  }
+
   const firstSunday = getFirstSundayForYear(year);
   const startOfWeek = new Date(firstSunday);
   startOfWeek.setDate(firstSunday.getDate() + weekNumber * 7); // Avanzar semanas desde el primer domingo
   return startOfWeek;
 }
 
-// Función para contar el número de semanas en un año
-function getWeeksInYear(year: number): number {
-  const lastDayOfYear = new Date(year, 11, 31);
-  const firstSunday = getFirstSundayForYear(year);
-  const totalDays = Math.floor(
-    (lastDayOfYear.getTime() - firstSunday.getTime()) / (1000 * 60 * 60 * 24)
-  );
-  return Math.ceil((totalDays + 1) / 7); // Cantidad de semanas completa desde el primer domingo al último día del año
-}
-
 interface IWeekDaysOfYearReturn {
   weeksInYear: number;
+  year: number;
+  month: number;
   week: DayInfo[];
 }
 // Sobrecarga de la función principal
 function getWeekDaysOfYear(): IWeekDaysOfYearReturn;
 function getWeekDaysOfYear(
-  targetYear: number,
-  targetWeekNumber: number
+  targetYear: number | undefined,
+  targetWeekNumber: number | undefined
 ): IWeekDaysOfYearReturn;
 function getWeekDaysOfYear(
-  targetYear?: number,
-  targetWeekNumber?: number
+  targetYear?: number | undefined,
+  targetWeekNumber?: number | undefined
 ): IWeekDaysOfYearReturn {
   // Si no se proporciona year y weekNumber, obtener la semana actual
   if (targetYear === undefined || targetWeekNumber === undefined) {
@@ -74,13 +98,15 @@ function getWeekDaysOfYear(
 
   const startOfWeek = getStartOfWeek(targetYear, targetWeekNumber); // Día inicial de la semana
   const days: DayInfo[] = [];
+  let currentYear: number = 0;
+  let currentMonth: number = 0;
 
   for (let i = 0; i < 7; i++) {
     const currentDate = new Date(startOfWeek);
     currentDate.setDate(startOfWeek.getDate() + i);
 
-    const currentYear = currentDate.getFullYear();
-    const currentMonth = currentDate.getMonth() + 1; // Mes en formato 1-12
+    currentYear = currentDate.getFullYear();
+    currentMonth = currentDate.getMonth() + 1; // Mes en formato 1-12
     const currentDay = currentDate.getDate();
     const dayLabel = daysOfWeek[i];
 
@@ -91,7 +117,12 @@ function getWeekDaysOfYear(
     });
   }
 
-  return { weeksInYear, week: days };
+  return {
+    weeksInYear,
+    week: days,
+    month: currentMonth - 1,
+    year: currentYear,
+  };
 }
 
 function getCurrentWeekNumber(): number {
@@ -112,4 +143,35 @@ function getCurrentWeekNumber(): number {
   return currentWeekNumber;
 }
 
-export { getWeekDaysOfYear, getCurrentWeekNumber };
+// Calcula las semanas de un mes específico
+const calculateWeeksInMonth = (year: number, month: number) => {
+  const weeks: { weekNumber: number; startDate: Date; endDate: Date }[] = [];
+  const firstDayOfMonth = new Date(year, month, 1);
+  const lastDayOfMonth = new Date(year, month + 1, 0);
+
+  let currentDate = new Date(firstDayOfMonth);
+  while (currentDate <= lastDayOfMonth) {
+    const weekNumber = Math.ceil(
+      (currentDate.getDate() + currentDate.getDay()) / 7
+    );
+    const startDate = new Date(currentDate);
+    const endDate = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth(),
+      currentDate.getDate() + 6 - currentDate.getDay()
+    );
+
+    if (endDate > lastDayOfMonth) endDate.setDate(lastDayOfMonth.getDate());
+    weeks.push({ weekNumber, startDate, endDate });
+
+    currentDate.setDate(currentDate.getDate() + 7);
+  }
+  return weeks;
+};
+
+export {
+  getWeekDaysOfYear,
+  getCurrentWeekNumber,
+  getWeeksInYear,
+  calculateWeeksInMonth,
+};
