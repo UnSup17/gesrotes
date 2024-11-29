@@ -1,6 +1,6 @@
 "use client";
 
-import DatePicker from "@/app/components/Datepicker";
+import DatePicker from "@/app/components/datePicker";
 import SearchBar from "@/app/components/SearchBar";
 import { EnumImage } from "@/app/model/EnumImage";
 import { useShiftContext } from "../../context/WeekContext";
