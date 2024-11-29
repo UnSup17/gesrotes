@@ -52,7 +52,6 @@ export const useWeekSelector = () => {
   }, []);
 
   const handleWeekSelection = ({ date, weekNumber }: IWeekSelectorHandler) => {
-    console.log(date, weekNumber);
     if (!date || date.year === undefined || date.month === undefined) {
       const response = getWeekDaysOfYear();
       setWeekInfo(response.week);

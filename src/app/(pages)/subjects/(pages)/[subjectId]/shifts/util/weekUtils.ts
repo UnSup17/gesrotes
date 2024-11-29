@@ -143,8 +143,16 @@ function getCurrentWeekNumber(): number {
   return currentWeekNumber;
 }
 
+export interface ICalculateWeeksInMonthResponse {
+  weekNumber: number;
+  startDate: Date;
+  endDate: Date;
+}
 // Calcula las semanas de un mes específico
-const calculateWeeksInMonth = (year: number, month: number) => {
+const calculateWeeksInMonth = (
+  year: number,
+  month: number
+): ICalculateWeeksInMonthResponse[] => {
   const weeks: { weekNumber: number; startDate: Date; endDate: Date }[] = [];
   const firstDayOfMonth = new Date(year, month, 1);
   const lastDayOfMonth = new Date(year, month + 1, 0);
