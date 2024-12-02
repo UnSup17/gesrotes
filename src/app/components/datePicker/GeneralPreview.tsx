@@ -24,6 +24,7 @@ export default function GeneralPreview({
           handleWeekSelection({
             ...weekParams,
             date: { year: weekParams.date.year, month: undefined },
+            weekNumber: undefined,
           });
           setAuxWeekNumber(undefined);
         }}

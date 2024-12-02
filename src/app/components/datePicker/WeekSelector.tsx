@@ -1,3 +1,4 @@
+import { useShiftContext } from "@/app/(pages)/subjects/(pages)/[subjectId]/shifts/context/WeekContext";
 import {
   calculateWeeksInMonth,
   ICalculateWeeksInMonthResponse,
@@ -5,14 +6,10 @@ import {
 import { useEffect, useState } from "react";
 
 interface IWeekSelector {
-  yearSelected: number | undefined;
-  monthSelected: number | undefined;
   handleWeekSelect: (weekNumber: number) => void;
   setAuxWeekNumber: (weekNumber: number) => void;
 }
 export default function WeekSelector({
-  yearSelected,
-  monthSelected,
   handleWeekSelect,
   setAuxWeekNumber,
 }: IWeekSelector) {
@@ -20,12 +17,22 @@ export default function WeekSelector({
     ICalculateWeeksInMonthResponse[] | undefined
   >(undefined);
 
-  useEffect(() => {
-    if (yearSelected === undefined || monthSelected === undefined) return;
-    setWeeksInMonth(calculateWeeksInMonth(yearSelected, monthSelected - 1));
-  }, [yearSelected, monthSelected]);
+  const { weekParams } = useShiftContext();
 
-  console.log(yearSelected, monthSelected);
+  useEffect(() => {
+    if (
+      weekParams.date.year === undefined ||
+      weekParams.date.month === undefined
+    )
+      return;
+    setWeeksInMonth(
+      calculateWeeksInMonth(weekParams.date.year, weekParams.date.month)
+    );
+  }, [weekParams.date.year, weekParams.date.month]);
+
+  console.log(
+    JSON.stringify({ year: weekParams.date.year, month: weekParams.date.month })
+  );
   if (!weeksInMonth) return null;
 
   return (

@@ -44,9 +44,10 @@ const DatePicker: FC<DatePickerProps> = ({
   };
 
   const handleMonthSelect = (monthIndex: number) => {
+    console.log(monthIndex);
     handleWeekSelection({
       ...weekParams,
-      date: { year: weekParams.date.year, month: monthIndex + 1 },
+      date: { ...weekParams.date, month: monthIndex },
     });
   };
 
@@ -87,7 +88,6 @@ const DatePicker: FC<DatePickerProps> = ({
               <MonthSelector
                 {...{
                   months,
-                  monthSelected: weekParams.date.month,
                   handleMonthSelect,
                 }}
               />
@@ -99,8 +99,6 @@ const DatePicker: FC<DatePickerProps> = ({
             auxWeekNumber === undefined && (
               <WeekSelector
                 {...{
-                  yearSelected: weekParams.date.year,
-                  monthSelected: weekParams.date.month,
                   handleWeekSelect,
                   setAuxWeekNumber,
                 }}
