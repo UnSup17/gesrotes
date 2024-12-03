@@ -11,7 +11,7 @@ export interface IWeekSelector {
     year: number | undefined;
     month: number | undefined;
   };
-  weekNumber: number;
+  weekNumber: number | undefined;
   weeksInYear: number;
 }
 
@@ -20,7 +20,7 @@ export interface IWeekSelectorHandler {
     year: number | undefined;
     month: number | undefined;
   };
-  weekNumber: number;
+  weekNumber: number | undefined;
 }
 
 export interface WeekSelectorReturn {
@@ -52,33 +52,27 @@ export const useWeekSelector = () => {
   }, []);
 
   const handleWeekSelection = ({ date, weekNumber }: IWeekSelectorHandler) => {
-    console.log(date, weekNumber);
-    if (!date || date.year === undefined || date.month === undefined) {
-      const response = getWeekDaysOfYear();
-      setWeekInfo(response.week);
-      setWeekParams({
-        date: {
-          year: date.year,
-          month: date.month,
-        },
-        weekNumber,
-        weeksInYear: response.weeksInYear,
-      });
-    } else {
-      let response = getWeekDaysOfYear(date.year, weekNumber);
-      setWeekInfo(response.week);
-      setWeekParams({
-        date: {
-          year: response.year,
-          month: response.month,
-        },
-        weekNumber,
-        weeksInYear: response.weeksInYear,
-      });
-    }
+    const response =
+      !date ||
+      date.year === undefined ||
+      date.month === undefined ||
+      weekNumber === undefined
+        ? getWeekDaysOfYear()
+        : getWeekDaysOfYear(date.year, weekNumber);
+
+    setWeekInfo(response.week);
+    setWeekParams({
+      date: {
+        year: response.year,
+        month: response.month,
+      },
+      weekNumber: response.weekNumber,
+      weeksInYear: response.weeksInYear,
+    });
   };
 
   const navigateWeek = (offset: number) => {
+    if (weekParams.weekNumber === undefined) return;
     const newWeekNumber = weekParams.weekNumber + offset;
     if (newWeekNumber < 0) {
       const previousYear = (weekParams.date.year as number) - 1;

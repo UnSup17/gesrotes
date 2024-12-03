@@ -63,6 +63,7 @@ function getStartOfWeek(year: number, weekNumber: number): Date {
 }
 
 interface IWeekDaysOfYearReturn {
+  weekNumber: number;
   weeksInYear: number;
   year: number;
   month: number;
@@ -118,6 +119,7 @@ function getWeekDaysOfYear(
   }
 
   return {
+    weekNumber: targetWeekNumber,
     weeksInYear,
     week: days,
     month: currentMonth - 1,
@@ -143,16 +145,28 @@ function getCurrentWeekNumber(): number {
   return currentWeekNumber;
 }
 
-// Calcula las semanas de un mes específico
-const calculateWeeksInMonth = (year: number, month: number) => {
-  const weeks: { weekNumber: number; startDate: Date; endDate: Date }[] = [];
+export interface ICalculateWeeksInMonthResponse {
+  weekNumber: number; // Semana relativa al año
+  startDate: Date;
+  endDate: Date;
+}
+// Calcula las semanas de un mes específico con números relativos al año
+const calculateWeeksInMonth = (
+  year: number,
+  month: number
+): ICalculateWeeksInMonthResponse[] => {
+  const weeks: ICalculateWeeksInMonthResponse[] = [];
   const firstDayOfMonth = new Date(year, month, 1);
   const lastDayOfMonth = new Date(year, month + 1, 0);
 
   let currentDate = new Date(firstDayOfMonth);
   while (currentDate <= lastDayOfMonth) {
+    const startOfYear = new Date(year, 0, 1);
+    const daysSinceStartOfYear =
+      (currentDate.getTime() - startOfYear.getTime()) / (1000 * 60 * 60 * 24);
+
     const weekNumber = Math.ceil(
-      (currentDate.getDate() + currentDate.getDay()) / 7
+      (daysSinceStartOfYear + startOfYear.getDay()) / 7
     );
     const startDate = new Date(currentDate);
     const endDate = new Date(
