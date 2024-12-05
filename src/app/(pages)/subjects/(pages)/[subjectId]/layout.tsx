@@ -1,4 +1,5 @@
 "use client";
+import { use } from "react";
 
 import { getSubjectMap, getSubjectMenus } from "@subjects/util/subjects";
 import Link from "next/link";
@@ -8,15 +9,16 @@ export interface ISubjectMenu {
   label: string;
   to: string;
 }
-export default function SubjectSelectedLayout({
-  children,
-  params,
-}: {
+export default function SubjectSelectedLayout(props: {
   children: React.ReactNode;
-  params: {
+  params: Promise<{
     subjectId: number;
-  };
+  }>;
 }) {
+  const params = use(props.params);
+
+  const { children } = props;
+
   const pathname = usePathname();
   if (!getSubjectMap()[params.subjectId]) redirect("/subjects");
   if (!params.subjectId) redirect("/");
