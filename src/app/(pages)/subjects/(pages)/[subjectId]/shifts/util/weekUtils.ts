@@ -2,8 +2,9 @@ const daysOfWeek = ["Dom", "Lun", "Mar", "Mier", "Jue", "Vier", "Sab"];
 
 export interface DayInfo {
   id: string;
-  day: number;
+  date: number;
   label: string;
+  isHighlighted: boolean;
 }
 
 const weeksInYearCache = new Map<number, number>();
@@ -102,8 +103,11 @@ function getWeekDaysOfYear(
   let currentYear: number = 0;
   let currentMonth: number = 0;
 
+  const today = new Date();
+
   for (let i = 0; i < 7; i++) {
     const currentDate = new Date(startOfWeek);
+
     currentDate.setDate(startOfWeek.getDate() + i);
 
     currentYear = currentDate.getFullYear();
@@ -113,8 +117,12 @@ function getWeekDaysOfYear(
 
     days.push({
       id: generateDayId(currentYear, currentMonth, currentDay),
-      day: currentDay,
+      date: currentDay,
       label: dayLabel,
+      isHighlighted:
+        today.getDate() === currentDay &&
+        today.getMonth() === currentMonth - 1 &&
+        today.getFullYear() === currentYear,
     });
   }
 

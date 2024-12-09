@@ -5,6 +5,8 @@ import { Avatar } from "@/app/components/ui/avatar";
 import { Button } from "@/app/components/ui/button";
 import Image from "next/image";
 import { EnumImage } from "@/app/model/EnumImage";
+import { useShiftContext } from "../../context/WeekContext";
+import TableSkeleton from "./Skeleton";
 
 interface Student {
   id: string;
@@ -88,18 +90,10 @@ const students: Student[] = [
   },
 ];
 
-const days = [
-  { name: "Dom", date: "30" },
-  { name: "Lun", date: "31" },
-  { name: "Mar", date: "1" },
-  { name: "Mier", date: "2", isHighlighted: true },
-  { name: "Jue", date: "3" },
-  { name: "Vie", date: "4" },
-  { name: "Sab", date: "5" },
-];
-
 export default function Table() {
-  const image = EnumImage.getImage("plusCircle");
+  const { weekInfo } = useShiftContext();
+  if (!weekInfo) return <TableSkeleton />;
+  const plusCircleIcon = EnumImage.getImage("plusCircle");
   return (
     <div className="border rounded-lg bg-white overflow-hidden">
       <div className="max-h-[600px] overflow-y-auto custom-scrollbar">
@@ -108,14 +102,14 @@ export default function Table() {
           <div className="sticky top-0 left-0 z-20 bg-gray-100 p-4 border-b font-medium">
             Estudiante
           </div>
-          {days.map((day) => (
+          {weekInfo.map((day) => (
             <div
-              key={day.name}
+              key={day.label}
               className={`sticky top-0 z-10 p-4 text-center border-b font-medium ${
                 day.isHighlighted ? "bg-blue-100" : "bg-gray-100"
               }`}
             >
-              <div>{day.name}</div>
+              <div>{day.label}</div>
               <div
                 className={day.isHighlighted ? "text-blue-800 font-bold" : ""}
               >
@@ -151,7 +145,7 @@ export default function Table() {
                   <div
                     key={`${student.id}-${index}`}
                     className={`p-2 border-b flex items-center justify-center ${
-                      days[index].isHighlighted ? "bg-blue-50" : ""
+                      weekInfo[index].isHighlighted ? "bg-blue-50" : ""
                     }`}
                   >
                     <Button
@@ -161,8 +155,8 @@ export default function Table() {
                     >
                       <div className="flex flex-col items-center gap-2 text-gray-500">
                         <Image
-                          alt={image.ariaLabel}
-                          src={image.src}
+                          alt={plusCircleIcon.ariaLabel}
+                          src={plusCircleIcon.src}
                           width={30}
                           height={30}
                         />
