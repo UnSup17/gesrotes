@@ -36,7 +36,7 @@ export default function WeekSelector({
   if (!weeksInMonth) return null;
 
   return (
-    <div className="grid grid-cols-1 gap-2 mt-4">
+    <div className="grid grid-cols-1 gap-2 mt-4 z-50">
       {weeksInMonth.map((week) => (
         <button
           key={week.weekNumber}

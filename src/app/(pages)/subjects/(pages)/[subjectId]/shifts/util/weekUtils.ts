@@ -95,7 +95,8 @@ function getWeekDaysOfYear(
 
   const weeksInYear = getWeeksInYear(targetYear);
   if (targetWeekNumber >= weeksInYear) {
-    throw new Error(`El año ${targetYear} solo tiene ${weeksInYear} semanas.`);
+    targetYear += 1;
+    targetWeekNumber = 0;
   }
 
   const startOfWeek = getStartOfWeek(targetYear, targetWeekNumber); // Día inicial de la semana
