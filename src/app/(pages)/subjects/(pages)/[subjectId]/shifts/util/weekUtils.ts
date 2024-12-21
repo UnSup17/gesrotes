@@ -2,6 +2,7 @@ const daysOfWeek = ["Dom", "Lun", "Mar", "Mier", "Jue", "Vier", "Sab"];
 
 export interface DayInfo {
   id: string;
+  description: string;
   date: number;
   label: string;
   isHighlighted: boolean;
@@ -116,8 +117,12 @@ function getWeekDaysOfYear(
     const currentDay = currentDate.getDate();
     const dayLabel = daysOfWeek[i];
 
+    const day = String(currentDay).padStart(2, '0');
+    const month = String(currentMonth).padStart(2, '0'); // Los meses van de 0 a 11
+
     days.push({
       id: generateDayId(currentYear, currentMonth, currentDay),
+      description: `${day}/${month}/${currentYear}`,
       date: currentDay,
       label: dayLabel,
       isHighlighted:

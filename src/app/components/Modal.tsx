@@ -3,9 +3,11 @@ import { createPortal } from "react-dom";
 import { Button } from "./ui/button";
 
 function Modal({
+  title,
   children,
   handleClose,
 }: {
+  title?: string;
   children: ReactNode;
   handleClose: () => void;
 }) {
@@ -33,22 +35,23 @@ function Modal({
   }, [handleClose]);
 
   return createPortal(
-    <div className="fixed inset-0 bg-[000]/0.6 flex flex-col items-center justify-center overflow-hidden z-40 px-10 py-5 bg-slate-400/30">
-      <div className="relative w-[70%]">
-        <Button
-          className="absolute top-4 right-4 z-50 bg-slate-100"
-          variant="outline"
-          size="default"
-          onClick={handleClose}
-        >
-          Close
-        </Button>
-      </div>
+    <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-start justify-center p-4">
       <div
         id="childrenModal"
-        className="w-[70%] h-[70%] bg-[#282c34] text-[#fff] flex items-center justify-center text-3xl rounded-3xl"
+        className="bg-white w-full max-w-3xl rounded-lg shadow-lg mt-16"
       >
-        {children}
+        <div className="flex items-center justify-between p-4 bg-[#0A2167] text-white rounded-t-lg">
+          <h2 className="text-lg font-semibold">{title}</h2>
+          <Button
+            className="p-1 hover:bg-blue-800 rounded-full transition-colors"
+            variant="outline"
+            size="default"
+            onClick={handleClose}
+          >
+            Close
+          </Button>
+        </div>
+        <div className="p-6">{children}</div>
       </div>
     </div>,
     document.body
