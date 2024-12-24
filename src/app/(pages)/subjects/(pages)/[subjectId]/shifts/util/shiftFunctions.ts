@@ -15,7 +15,7 @@ export const getTopLeftFunctions = (): IFunctionModalProps[] => {
     {
       label: "Alimentación",
       modalName: "Gestionar alimentación",
-      component: FeedingManager, // Referencia al componente
+      component: FeedingManager,
     },
     {
       label: "Etiquetas",
