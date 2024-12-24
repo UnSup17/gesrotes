@@ -6,6 +6,7 @@ import { Fragment, useEffect, useState } from "react";
 import { useShiftContext } from "../../context/WeekContext";
 import { DayInfo } from "../../util/weekUtils";
 import Modal from "@/app/components/Modal";
+import { AssignTurn } from "../modals/assignTurn";
 
 interface Student {
   id: string;
@@ -92,6 +93,7 @@ const students: Student[] = [
 export default function StudentRows({ weekInfo }: { weekInfo: DayInfo[] }) {
   const [filteredStudents, setFilteredStudents] = useState<Student[]>([]);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [isAssignStudentModalOpen, setIsAssignStudentModalOpen] =
     useState(false);
 
@@ -106,8 +108,9 @@ export default function StudentRows({ weekInfo }: { weekInfo: DayInfo[] }) {
     );
   }, [studentFilter]);
 
-  const handleOpenAssignStudentModal = (student: Student) => {
+  const handleOpenAssignStudentModal = (student: Student, date: string) => {
     setSelectedStudent(student);
+    setSelectedDate(date);
     setIsAssignStudentModalOpen(true);
   };
 
@@ -148,7 +151,12 @@ export default function StudentRows({ weekInfo }: { weekInfo: DayInfo[] }) {
                   variant="outline"
                   size="sm"
                   className="w-full h-full min-h-[100px] border-dashed"
-                  onClick={() => handleOpenAssignStudentModal(student)}
+                  onClick={() =>
+                    handleOpenAssignStudentModal(
+                      student,
+                      weekInfo[index].description
+                    )
+                  }
                 >
                   <div className="flex flex-col items-center gap-2 text-gray-500">
                     <Image
@@ -164,14 +172,18 @@ export default function StudentRows({ weekInfo }: { weekInfo: DayInfo[] }) {
             ))}
         </Fragment>
       ))}
-      {isAssignStudentModalOpen && (
+      {isAssignStudentModalOpen && selectedStudent && (
         <Modal
+          title="GESTIONAR TURNO"
           handleClose={() => {
             console.log("close");
             setIsAssignStudentModalOpen(false);
           }}
         >
-          <div>hola</div>
+          <AssignTurn
+            studentName={`${selectedStudent.name} ${selectedStudent.lastName} - ${selectedStudent.id}`}
+            selectedDate={`${selectedDate}`}
+          />
         </Modal>
       )}
     </>
