@@ -2,8 +2,10 @@ const daysOfWeek = ["Dom", "Lun", "Mar", "Mier", "Jue", "Vier", "Sab"];
 
 export interface DayInfo {
   id: string;
-  day: number;
+  description: string;
+  date: number;
   label: string;
+  isHighlighted: boolean;
 }
 
 const weeksInYearCache = new Map<number, number>();
@@ -94,7 +96,8 @@ function getWeekDaysOfYear(
 
   const weeksInYear = getWeeksInYear(targetYear);
   if (targetWeekNumber >= weeksInYear) {
-    throw new Error(`El año ${targetYear} solo tiene ${weeksInYear} semanas.`);
+    targetYear += 1;
+    targetWeekNumber = 0;
   }
 
   const startOfWeek = getStartOfWeek(targetYear, targetWeekNumber); // Día inicial de la semana
@@ -102,8 +105,11 @@ function getWeekDaysOfYear(
   let currentYear: number = 0;
   let currentMonth: number = 0;
 
+  const today = new Date();
+
   for (let i = 0; i < 7; i++) {
     const currentDate = new Date(startOfWeek);
+
     currentDate.setDate(startOfWeek.getDate() + i);
 
     currentYear = currentDate.getFullYear();
@@ -111,10 +117,18 @@ function getWeekDaysOfYear(
     const currentDay = currentDate.getDate();
     const dayLabel = daysOfWeek[i];
 
+    const day = String(currentDay).padStart(2, '0');
+    const month = String(currentMonth).padStart(2, '0'); // Los meses van de 0 a 11
+
     days.push({
       id: generateDayId(currentYear, currentMonth, currentDay),
-      day: currentDay,
+      description: `${day}/${month}/${currentYear}`,
+      date: currentDay,
       label: dayLabel,
+      isHighlighted:
+        today.getDate() === currentDay &&
+        today.getMonth() === currentMonth - 1 &&
+        today.getFullYear() === currentYear,
     });
   }
 

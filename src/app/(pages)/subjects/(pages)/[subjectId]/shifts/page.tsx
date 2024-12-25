@@ -2,8 +2,8 @@
 
 import ViewFunctions from "@subjects/(pages)/[subjectId]/shifts/components/functions";
 import Parametrizer from "@subjects/(pages)/[subjectId]/shifts/components/parametrizer";
-import { WeekProvider } from "./context/WeekContext";
 import Table from "./components/table";
+import { WeekProvider } from "./context/WeekContext";
 
 export default function ShiftsPage() {
   return (

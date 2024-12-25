@@ -46,6 +46,14 @@ export class EnumImage {
       ariaLabel: "plusCircle",
       src: "/svg/plusCircle.svg",
     },
+    {
+      ariaLabel: "close",
+      src: "/svg/close.svg",
+    },
+    {
+      ariaLabel: "check",
+      src: "/svg/check.svg",
+    },
     // Quitar luego
     {
       ariaLabel: "profilePhotoDemo",
