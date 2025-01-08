@@ -55,6 +55,21 @@ const DatePicker: FC<DatePickerProps> = ({
     handleWeekSelection({ ...weekParams, weekNumber });
   };
 
+  console.log(
+    JSON.stringify({ selectYear, selectMonth, weekParams, auxWeekNumber })
+  );
+
+  const flagYearSelector = selectYear && !weekParams.date.year;
+  const flagMonthSelector =
+    selectYear &&
+    selectMonth &&
+    weekParams.date.year &&
+    weekParams.date.month === undefined;
+  const flagWeekSelector =
+    weekParams.date.year &&
+    weekParams.date.month !== undefined &&
+    auxWeekNumber === undefined;
+
   return (
     <>
       {/* Mostrar año y mes seleccionados y permitir volver a ellos */}
@@ -70,40 +85,30 @@ const DatePicker: FC<DatePickerProps> = ({
 
       <div className="relative">
         <div className={"w-1/2 flex flex-col items-center absolute"}>
-          {/* Year Selector */}
-          {selectYear && !weekParams.date.year && (
+          {flagYearSelector ? (
             <YearSelector
               {...{
                 yearSelected: weekParams.date.year,
                 handleYearSelect,
               }}
             />
-          )}
-
-          {/* Month Selector */}
-          {selectYear &&
-            weekParams.date.year &&
-            selectMonth &&
-            weekParams.date.month === undefined && (
-              <MonthSelector
-                {...{
-                  months,
-                  handleMonthSelect,
-                }}
-              />
-            )}
-
-          {/* Week Selector */}
-          {weekParams.date.year &&
-            weekParams.date.month !== undefined &&
-            auxWeekNumber === undefined && (
+          ) : flagMonthSelector ? (
+            <MonthSelector
+              {...{
+                months,
+                handleMonthSelect,
+              }}
+            />
+          ) : (
+            flagWeekSelector && (
               <WeekSelector
                 {...{
                   handleWeekSelect,
                   setAuxWeekNumber,
                 }}
               />
-            )}
+            )
+          )}
         </div>
       </div>
     </>
