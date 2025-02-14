@@ -82,7 +82,6 @@ const DatePicker: FC<DatePickerProps> = ({
           }}
         />
       )}
-
       <div className="relative">
         <div className={"w-1/2 flex flex-col items-center absolute"}>
           {flagYearSelector ? (
