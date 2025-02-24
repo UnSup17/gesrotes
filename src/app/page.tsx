@@ -9,7 +9,7 @@ export default function Home() {
         <form className="flex flex-col gap-4">
           <p className="text-center font-bold">Inicio de sesión</p>
           <div className="flex flex-col italic">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username">Usuario</label>
             <input id="username" type="text" />
           </div>
           <div className="flex flex-col italic">
