@@ -8,7 +8,7 @@ interface IParams {
   setStudentFilter: (value: string) => void;
 }
 
-const ShiftContext = createContext<(WeekSelectorReturn & IParams) | null>(null);
+const WeekContext = createContext<(WeekSelectorReturn & IParams) | null>(null);
 
 export const WeekProvider: FC<{ children: ReactNode }> = ({
   children,
@@ -19,15 +19,14 @@ export const WeekProvider: FC<{ children: ReactNode }> = ({
   const week = useWeekSelector();
 
   return (
-    <ShiftContext.Provider value={{ ...week, studentFilter, setStudentFilter }}>
+    <WeekContext.Provider value={{ ...week, studentFilter, setStudentFilter }}>
       {children}
-    </ShiftContext.Provider>
+    </WeekContext.Provider>
   );
 };
 
-export const useShiftContext = () => {
-  const shift = useContext(ShiftContext);
-  if (!shift)
-    throw new Error("ShiftContext must be used within a ShiftProvider");
-  return shift;
+export const useWeekContext = () => {
+  const week = useContext(WeekContext);
+  if (!week) throw new Error("WeekContext must be used within a WeekProvider");
+  return week;
 };

@@ -1,112 +1,50 @@
+"use client";
+
+import Modal from "@/app/components/Modal";
 import { Avatar } from "@/app/components/ui/avatar";
 import { Button } from "@/app/components/ui/button";
 import { EnumImage } from "@/app/model/EnumImage";
 import Image from "next/image";
+import { useParams } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
-import { useShiftContext } from "../../context/WeekContext";
+import { useWeekContext } from "../../context/WeekContext";
 import { DayInfo } from "../../util/weekUtils";
-import Modal from "@/app/components/Modal";
 import { AssignTurn } from "../modals/assignTurn";
+import { fetchStudentList } from "./students";
 
-interface Student {
+export interface Student {
   id: string;
-  name: string;
-  lastName: string;
-  avatarUrl: string;
+  fullName: string;
+  avatarUrl?: string;
 }
 
-const students: Student[] = [
-  {
-    id: "1",
-    name: "Juan Sebastian",
-    lastName: "Aguirre Chilito",
-    avatarUrl: "/svg/profilePhotoDemo.svg",
-  },
-  {
-    id: "2",
-    name: "Jonatan David",
-    lastName: "Bravo Londoño",
-    avatarUrl: "/svg/profilePhotoDemo.svg",
-  },
-  {
-    id: "3",
-    name: "Yulieth Alexandra",
-    lastName: "Gaviria Ortega",
-    avatarUrl: "/svg/profilePhotoDemo.svg",
-  },
-  {
-    id: "4",
-    name: "Karen Lizeth",
-    lastName: "Mejia Mendoza",
-    avatarUrl: "/svg/profilePhotoDemo.svg",
-  },
-  {
-    id: "11",
-    name: "Juan Sebastian",
-    lastName: "Aguirre Chilito",
-    avatarUrl: "/svg/profilePhotoDemo.svg",
-  },
-  {
-    id: "12",
-    name: "Jonatan David",
-    lastName: "Bravo Londoño",
-    avatarUrl: "/svg/profilePhotoDemo.svg",
-  },
-  {
-    id: "13",
-    name: "Yulieth Alexandra",
-    lastName: "Gaviria Ortega",
-    avatarUrl: "/svg/profilePhotoDemo.svg",
-  },
-  {
-    id: "14",
-    name: "Karen Lizeth",
-    lastName: "Mejia Mendoza",
-    avatarUrl: "/svg/profilePhotoDemo.svg",
-  },
-  {
-    id: "21",
-    name: "Juan Sebastian",
-    lastName: "Aguirre Chilito",
-    avatarUrl: "/svg/profilePhotoDemo.svg",
-  },
-  {
-    id: "22",
-    name: "Jonatan David",
-    lastName: "Bravo Londoño",
-    avatarUrl: "/svg/profilePhotoDemo.svg",
-  },
-  {
-    id: "23",
-    name: "Yulieth Alexandra",
-    lastName: "Gaviria Ortega",
-    avatarUrl: "/svg/profilePhotoDemo.svg",
-  },
-  {
-    id: "24",
-    name: "Karen Lizeth",
-    lastName: "Mejia Mendoza",
-    avatarUrl: "/svg/profilePhotoDemo.svg",
-  },
-];
-
 export default function StudentRows({ weekInfo }: { weekInfo: DayInfo[] }) {
+  const [students, setStudents] = useState<Student[]>();
   const [filteredStudents, setFilteredStudents] = useState<Student[]>([]);
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [isAssignStudentModalOpen, setIsAssignStudentModalOpen] =
     useState(false);
 
-  const { studentFilter } = useShiftContext();
+  const params = useParams();
+  const { studentFilter } = useWeekContext();
+
   useEffect(() => {
-    setFilteredStudents(
-      students.filter(
-        (item) =>
-          item.name.toLowerCase().includes(studentFilter.toLowerCase()) ||
-          item.lastName.toLowerCase().includes(studentFilter.toLowerCase())
-      )
-    );
-  }, [studentFilter]);
+    async function fetchData() {
+      const aux = await fetchStudentList(+(params.subjectId || ""));
+      setStudents(aux);
+    }
+    fetchData();
+  }, [params.subjectId]);
+
+  useEffect(() => {
+    if (students)
+      setFilteredStudents(
+        students.filter((item) =>
+          item.fullName.toLowerCase().includes(studentFilter.toLowerCase())
+        )
+      );
+  }, [studentFilter, students]);
 
   const handleOpenAssignStudentModal = (student: Student, date: string) => {
     setSelectedStudent(student);
@@ -115,6 +53,11 @@ export default function StudentRows({ weekInfo }: { weekInfo: DayInfo[] }) {
   };
 
   const plusCircleIcon = EnumImage.getImage("plusCircle");
+
+  if (students?.length === 0) {
+    return <>No existen estudiantes registrados</>;
+  }
+
   return (
     <>
       {/* filteredStudents and attendance cells */}
@@ -123,18 +66,11 @@ export default function StudentRows({ weekInfo }: { weekInfo: DayInfo[] }) {
           <div className="sticky left-0 z-10 bg-white p-4 border-b flex items-center gap-3">
             <Avatar
               src={student.avatarUrl}
-              alt={`${student.name} ${student.lastName}`}
-              fallback={`${student.name.charAt(0)}${student.lastName.charAt(
-                0
-              )}`}
+              alt={`${student.fullName}`}
+              fallback={student.fullName.charAt(0)}
             />
             <div className="flex flex-col">
-              <span className="font-medium">
-                {student.lastName} {student.name.split(" ")[0]}
-              </span>
-              <span className="text-sm text-gray-500">
-                {student.name} {student.lastName}
-              </span>
+              <span className="font-medium">{student.fullName}</span>
             </div>
           </div>
           {/* Attendance cells */}
@@ -181,7 +117,7 @@ export default function StudentRows({ weekInfo }: { weekInfo: DayInfo[] }) {
           }}
         >
           <AssignTurn
-            studentName={`${selectedStudent.name} ${selectedStudent.lastName} - ${selectedStudent.id}`}
+            studentName={`${selectedStudent.fullName} - ${selectedStudent.id}`}
             selectedDate={`${selectedDate}`}
           />
         </Modal>

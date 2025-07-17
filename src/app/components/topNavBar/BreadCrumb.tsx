@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { chooseLabelForDynamicRoute, translator } from "../../util/translator";
 
 export default function BreadCrumb() {
@@ -10,6 +10,7 @@ export default function BreadCrumb() {
     .split("/")
     .filter((item) => item !== "");
   let breadCrumb = "/";
+  const params = useSearchParams();
   return (
     <div className="flex items-center gap-2">
       <Link href={"/subjects"}>
@@ -34,7 +35,8 @@ export default function BreadCrumb() {
                 {isDynamicRoute
                   ? chooseLabelForDynamicRoute(
                       item,
-                      breadCrumb.slice(0, breadCrumb.length - 1)
+                      breadCrumb.slice(0, breadCrumb.length - 1),
+                      params
                     )
                   : translator[item] || item}
               </p>

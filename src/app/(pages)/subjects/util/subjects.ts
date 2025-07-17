@@ -1,47 +1,22 @@
-import { ISubjectMenu } from "@subjects/(pages)/[subjectId]/layout";
+"use server"
+
+import { fetchData } from "@/app/util/fetch";
 import { ISubjectCard } from "@subjects/components/SubjectCard";
 
-export const getSubjectMap = (): { [key: string]: ISubjectCard } => {
-  return {
-    "1": {
-      id: 1,
-      title: "Cuidado de enfermería en salud mental",
-      program: "Enfermería"
-    },
-    "2": {
-      id: 2,
-      title: "Cuidado al adulto mayor",
-      program: "Enfermería"
-    },
-    "3": {
-      id: 3,
-      title: "Salud para deportistas",
-      program: "Enfermería"
-    },
-  }
+const TESTPROGRAM = {
+  ID: 31,
+  NAME: "Enfermería"
 }
 
-export const getSubjectMenus = (subjectId: number): ISubjectMenu[] => {
-  return [
-    {
-      label: "Estudiantes",
-      to: `/subjects/${subjectId}/students`
-    },
-    {
-      label: "Profesores",
-      to: `/subjects/${subjectId}/teachers`
-    },
-    {
-      label: "Rotes",
-      to: `/subjects/${subjectId}/rotations`
-    },
-    {
-      label: "Turnos",
-      to: `/subjects/${subjectId}/shifts`
-    },
-    {
-      label: "Documentos",
-      to: `/subjects/${subjectId}/documents`
-    },
-  ]
+export async function getSubjectMap(): Promise<{ [key: string]: ISubjectCard }> {
+  return fetchData({ specificEndpoint: `asignaturas?programa=${TESTPROGRAM.ID}` })
+    .then((response) => response.json())
+    .then((json) => Array.from(json).map((item: any) => {
+      return {
+        id: item.id,
+        title: item.label,
+        program: TESTPROGRAM.NAME
+      }
+    }))
+    .catch((err) => err)
 }

@@ -122,7 +122,7 @@ function getWeekDaysOfYear(
 
     days.push({
       id: generateDayId(currentYear, currentMonth, currentDay),
-      description: `${day}/${month}/${currentYear}`,
+      description: `${currentYear}${month}${day}`,
       date: currentDay,
       label: dayLabel,
       isHighlighted:

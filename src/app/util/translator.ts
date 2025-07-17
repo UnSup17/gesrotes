@@ -1,4 +1,4 @@
-import { getSubjectMap } from "../(pages)/subjects/util/subjects";
+import { ReadonlyURLSearchParams } from "next/navigation";
 
 interface ITranslator {
   [key: string]: string
@@ -26,10 +26,10 @@ function findPreviousRoute(text: string): string | null {
   }
   return text.substring(secondToLastSlashIndex + 1, lastSlashIndex);
 }
-function chooseLabelForDynamicRoute(item: string, context: string) {
+function chooseLabelForDynamicRoute(item: string, context: string, params: ReadonlyURLSearchParams) {
   switch (findPreviousRoute(context)) {
     case "subjects":
-      return getSubjectMap()[item]?.title || item;
+      return params.get("subjectName") || item;
     default:
       return item;
   }

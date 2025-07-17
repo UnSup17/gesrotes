@@ -23,56 +23,6 @@ export function AssignTurn({ studentName, selectedDate }: AssignTurnProps) {
       jornada: "Mañana (8-12 p.m)",
       etiqueta: "Salas",
     },
-    {
-      escenario: "Hospital San José",
-      jornada: "Mañana (8-12 p.m)",
-      etiqueta: "Salas",
-    },
-    {
-      escenario: "Hospital San José",
-      jornada: "Mañana (8-12 p.m)",
-      etiqueta: "Salas",
-    },
-    {
-      escenario: "Hospital San José",
-      jornada: "Mañana (8-12 p.m)",
-      etiqueta: "Salas",
-    },
-    {
-      escenario: "Hospital San José",
-      jornada: "Mañana (8-12 p.m)",
-      etiqueta: "Salas",
-    },
-    {
-      escenario: "Hospital San José",
-      jornada: "Mañana (8-12 p.m)",
-      etiqueta: "Salas",
-    },
-    {
-      escenario: "Hospital San José",
-      jornada: "Mañana (8-12 p.m)",
-      etiqueta: "Salas",
-    },
-    {
-      escenario: "Hospital San José",
-      jornada: "Mañana (8-12 p.m)",
-      etiqueta: "Salas",
-    },
-    {
-      escenario: "Hospital San José",
-      jornada: "Mañana (8-12 p.m)",
-      etiqueta: "Salas",
-    },
-    {
-      escenario: "Hospital San José",
-      jornada: "Mañana (8-12 p.m)",
-      etiqueta: "Salas",
-    },
-    {
-      escenario: "Hospital San José",
-      jornada: "Mañana (8-12 p.m)",
-      etiqueta: "Salas",
-    },
   ]);
 
   const handleSubmit = (e: FormEvent) => {

@@ -2,14 +2,25 @@
 
 import SearchBar from "@/app/components/SearchBar";
 import { EnumImage } from "@/app/model/EnumImage";
-import SubjectCard from "@subjects/components/SubjectCard";
+import SubjectCard, { ISubjectCard } from "@subjects/components/SubjectCard";
 import { getSubjectMap } from "@subjects/util/subjects";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function SubjectsPage() {
-  const defaultSubjects = Object.values(getSubjectMap());
+  const [defaultSubjects, setDefaultSubjects] = useState<ISubjectCard[]>();
+  const [subjects, setSubjects] = useState<ISubjectCard[]>();
   const [searchParam, setSearchParam] = useState<string>("");
-  const [subjects, setSubjects] = useState(defaultSubjects);
+
+  useEffect(() => {
+    async function fetchData() {
+      const aux = Object.values(await getSubjectMap());
+      setDefaultSubjects(aux);
+      setSubjects(aux);
+    }
+    fetchData();
+  }, []);
+
+  if (!defaultSubjects || !subjects) return;
 
   const handleSearch = (searchText: string) => {
     setSearchParam(searchText);

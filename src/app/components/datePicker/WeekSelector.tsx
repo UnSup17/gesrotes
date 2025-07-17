@@ -1,4 +1,4 @@
-import { useShiftContext } from "@/app/(pages)/subjects/(pages)/[subjectId]/shifts/context/WeekContext";
+import { useWeekContext } from "@/app/(pages)/subjects/(pages)/[subjectId]/shifts/context/WeekContext";
 import {
   calculateWeeksInMonth,
   ICalculateWeeksInMonthResponse,
@@ -17,7 +17,7 @@ export default function WeekSelector({
     ICalculateWeeksInMonthResponse[] | undefined
   >(undefined);
 
-  const { weekParams } = useShiftContext();
+  const { weekParams } = useWeekContext();
 
   useEffect(() => {
     if (

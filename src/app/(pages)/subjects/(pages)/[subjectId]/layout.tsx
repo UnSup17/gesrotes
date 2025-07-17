@@ -1,7 +1,6 @@
 "use client";
 import { use } from "react";
 
-import { getSubjectMap, getSubjectMenus } from "@subjects/util/subjects";
 import Link from "next/link";
 import { redirect, usePathname } from "next/navigation";
 
@@ -20,7 +19,6 @@ export default function SubjectSelectedLayout(props: {
   const { children } = props;
 
   const pathname = usePathname();
-  if (!getSubjectMap()[params.subjectId]) redirect("/subjects");
   if (!params.subjectId) redirect("/");
 
   const menus = getSubjectMenus(params.subjectId);
@@ -46,3 +44,28 @@ export default function SubjectSelectedLayout(props: {
     </section>
   );
 }
+
+export const getSubjectMenus = (subjectId: number): ISubjectMenu[] => {
+  return [
+    {
+      label: "Estudiantes",
+      to: `/subjects/${subjectId}/students`,
+    },
+    {
+      label: "Profesores",
+      to: `/subjects/${subjectId}/teachers`,
+    },
+    {
+      label: "Rotes",
+      to: `/subjects/${subjectId}/rotations`,
+    },
+    {
+      label: "Turnos",
+      to: `/subjects/${subjectId}/shifts`,
+    },
+    {
+      label: "Documentos",
+      to: `/subjects/${subjectId}/documents`,
+    },
+  ];
+};

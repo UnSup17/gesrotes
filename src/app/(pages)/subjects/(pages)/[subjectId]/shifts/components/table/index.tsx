@@ -1,12 +1,12 @@
 "use client";
 
-import { useShiftContext } from "../../context/WeekContext";
+import { useWeekContext } from "../../context/WeekContext";
 import Header from "./Header";
 import TableSkeleton from "./Skeleton";
 import StudentRows from "./StudentRows";
 
 export default function Table() {
-  const { weekInfo } = useShiftContext();
+  const { weekInfo } = useWeekContext();
   if (!weekInfo) return <TableSkeleton />;
   return (
     <div className="border rounded-lg bg-white overflow-hidden">
