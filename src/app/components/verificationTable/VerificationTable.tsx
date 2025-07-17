@@ -1,3 +1,3 @@
 export default function VerificationTable() {
-  return <>AAA</>;
+  return <>AAA</>; // esto no se usó al final... why
 }
