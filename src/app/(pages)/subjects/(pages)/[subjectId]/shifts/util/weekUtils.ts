@@ -2,6 +2,7 @@ const daysOfWeek = ["Dom", "Lun", "Mar", "Mier", "Jue", "Vier", "Sab"];
 
 export interface DayInfo {
   id: string;
+  calendarDate: string;
   description: string;
   date: number;
   label: string;
@@ -122,6 +123,7 @@ function getWeekDaysOfYear(
 
     days.push({
       id: generateDayId(currentYear, currentMonth, currentDay),
+      calendarDate: `${currentYear}-${month}-${day}`,
       description: `${currentYear}${month}${day}`,
       date: currentDay,
       label: dayLabel,

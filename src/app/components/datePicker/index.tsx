@@ -1,5 +1,5 @@
+import { useShiftContext } from "@/app/(pages)/subjects/(pages)/[subjectId]/shifts/context/ShiftContext";
 import { FC, useEffect, useState } from "react";
-import { useWeekContext } from "../../(pages)/subjects/(pages)/[subjectId]/shifts/context/WeekContext";
 import GeneralPreview from "./GeneralPreview";
 import MonthSelector from "./MonthSelector";
 import WeekSelector from "./WeekSelector";
@@ -32,7 +32,7 @@ const DatePicker: FC<DatePickerProps> = ({
 }) => {
   const [auxWeekNumber, setAuxWeekNumber] = useState<number | undefined>();
 
-  const { weekParams, handleWeekSelection } = useWeekContext();
+  const { weekParams, handleWeekSelection } = useShiftContext();
 
   useEffect(() => {
     setAuxWeekNumber(weekParams.weekNumber);
@@ -44,7 +44,6 @@ const DatePicker: FC<DatePickerProps> = ({
   };
 
   const handleMonthSelect = (monthIndex: number) => {
-    console.log(monthIndex);
     handleWeekSelection({
       ...weekParams,
       date: { ...weekParams.date, month: monthIndex },
@@ -54,10 +53,6 @@ const DatePicker: FC<DatePickerProps> = ({
   const handleWeekSelect = (weekNumber: number) => {
     handleWeekSelection({ ...weekParams, weekNumber });
   };
-
-  console.log(
-    JSON.stringify({ selectYear, selectMonth, weekParams, auxWeekNumber })
-  );
 
   const flagYearSelector = selectYear && !weekParams.date.year;
   const flagMonthSelector =

@@ -3,10 +3,10 @@
 import DatePicker from "@/app/components/datePicker";
 import SearchBar from "@/app/components/SearchBar";
 import { EnumImage } from "@/app/model/EnumImage";
-import { useWeekContext } from "../../context/WeekContext";
+import { useShiftContext } from "../../context/ShiftContext";
 
 export default function Parametrizer() {
-  const { studentFilter, setStudentFilter } = useWeekContext();
+  const { studentFilter, setStudentFilter } = useShiftContext();
 
   function handleSearchStudent(searchText: string): void {
     setStudentFilter(searchText);

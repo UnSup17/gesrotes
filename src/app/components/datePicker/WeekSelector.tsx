@@ -1,4 +1,4 @@
-import { useWeekContext } from "@/app/(pages)/subjects/(pages)/[subjectId]/shifts/context/WeekContext";
+import { useShiftContext } from "@/app/(pages)/subjects/(pages)/[subjectId]/shifts/context/ShiftContext";
 import {
   calculateWeeksInMonth,
   ICalculateWeeksInMonthResponse,
@@ -17,7 +17,7 @@ export default function WeekSelector({
     ICalculateWeeksInMonthResponse[] | undefined
   >(undefined);
 
-  const { weekParams } = useWeekContext();
+  const { weekParams } = useShiftContext();
 
   useEffect(() => {
     if (
@@ -30,9 +30,6 @@ export default function WeekSelector({
     );
   }, [weekParams.date.year, weekParams.date.month]);
 
-  console.log(
-    JSON.stringify({ year: weekParams.date.year, month: weekParams.date.month })
-  );
   if (!weeksInMonth) return null;
 
   return (

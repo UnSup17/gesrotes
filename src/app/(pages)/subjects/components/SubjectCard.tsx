@@ -1,4 +1,5 @@
 import Link from "next/link";
+import SelectSubjectButton from "./SelectSubjectButton";
 
 export interface ISubjectCard {
   id: number;
@@ -17,12 +18,7 @@ export default function SubjectCard({ id, title, program }: ISubjectCard) {
         <button disabled className="bg-[#08743a4b] rounded-md px-2 py-1">
           Estado de la asignatura
         </button>
-        <Link
-          href={`/subjects/${id}/shifts?subjectName=${title}`}
-          className="bg-[#08743B] rounded-md px-2 py-1 h-full text-center flex place-items-center"
-        >
-          Gestionar asignatura
-        </Link>
+        <SelectSubjectButton {...{ id, title }} />
       </div>
     </div>
   );

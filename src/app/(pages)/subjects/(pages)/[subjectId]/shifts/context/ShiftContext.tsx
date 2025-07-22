@@ -1,5 +1,6 @@
 "use cliet";
 
+import { useParams } from "next/navigation";
 import {
   createContext,
   FC,
@@ -8,8 +9,16 @@ import {
   useEffect,
   useState,
 } from "react";
+import { useWeekSelector, WeekSelectorReturn } from "../hooks/useWeekSelector";
 import { fetchScenarios, Scenario } from "./util/scenarios";
 import { fetchServicesMap, Service, ServicesMap } from "./util/services";
+import {
+  fetchCreateShift,
+  fetchShifts,
+  IFetchCreateShift,
+  Shift,
+} from "./util/shifts";
+import { fetchStudentList, Student } from "./util/students";
 import {
   AssociatedTag,
   fetchAssociatedTags,
@@ -20,45 +29,103 @@ import {
   fetchTags,
   Tag,
 } from "./util/tags";
+import { fetchWorkdays, Workday } from "./util/workday";
 
 interface IParams {
+  loading: boolean;
+  students: Student[];
   scenarios: Scenario[];
+  workdays: Workday[];
   tags: Tag[];
   associatedTags: AssociatedTag[];
   servicesMap: ServicesMap;
+  shifts: { [key: string]: Shift[] };
+  selectedShifts: Shift[];
+  studentFilter: string;
   handleSetTags: (tags: Tag[]) => void;
   filterServices: (idScenario: number) => Promise<Service[]>;
-  createTag: (tag: string, scenario: number) => Promise<void>
+  createTag: (tag: string, scenario: number) => Promise<void>;
   deleteTag: (tag: number) => Promise<void>;
   associateTag: (tag: number, service: number) => void;
   dissociateTag: (associatedId: number) => Promise<void>;
+  createShift: (params: IFetchCreateShift) => Promise<void>;
+  setStudentFilter: (value: string) => void;
+  setSelectedShifts: (shifts: Shift[]) => void;
 }
 
-const ShiftContext = createContext<IParams | null>(null);
+const ShiftContext = createContext<(IParams & WeekSelectorReturn) | null>(null);
 
 export const ShiftProvider: FC<{ children: ReactNode }> = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
+  const [studentFilter, setStudentFilter] = useState<string>("");
+  const [students, setStudents] = useState<Student[]>([]);
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
+  const [workdays, setWorkday] = useState<Workday[]>([]);
   const [tags, setTags] = useState<Tag[]>([]);
   const [servicesMap, setServicesMap] = useState<ServicesMap>([]);
   const [associatedTags, setAssociatedTags] = useState<AssociatedTag[]>([]);
+  const [shifts, setShifts] = useState<{ [key: string]: Shift[] }>({});
+  const [selectedShifts, setSelectedShifts] = useState<Shift[]>([]);
+  const [loading, setLoading] = useState(true);
+  const weekSelector = useWeekSelector();
+  const { subjectId } = useParams();
 
   useEffect(() => {
     async function fetchData() {
-      const scenarios = await fetchScenarios();
-      const tags = await fetchTags();
-      const associatedTags = await fetchAssociatedTags();
-      const servicesMap = await fetchServicesMap();
-      setScenarios(scenarios);
-      setTags(tags);
-      setAssociatedTags(associatedTags);
-      setServicesMap(servicesMap);
+      try {
+        const [scenarios, workdays, tags, associatedTags, servicesMap] =
+          await Promise.all([
+            fetchScenarios(),
+            fetchWorkdays(),
+            fetchTags(),
+            fetchAssociatedTags(),
+            fetchServicesMap(),
+          ]);
+
+        setScenarios(scenarios);
+        setWorkday(workdays);
+        setTags(tags);
+        setAssociatedTags(associatedTags);
+        setServicesMap(servicesMap);
+      } catch (error) {
+        alert("Error al cargar datos:" + error);
+      } finally {
+        setLoading(false);
+      }
     }
     fetchData();
   }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      const aux = await fetchStudentList(+(subjectId as string));
+      setStudents(aux);
+    }
+    if (subjectId) {
+      fetchData();
+    }
+  }, [subjectId]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const aux = await fetchShifts({
+          classGroup: +(subjectId || ""),
+          startDay: weekSelector.weekInfo[0].calendarDate,
+          endDay: weekSelector.weekInfo[6].calendarDate,
+        });
+        setShifts(aux);
+      } catch (error: any) {
+        alert("No se encontraron resultados para los turnos. " + error.message);
+      }
+    }
+    if (subjectId && weekSelector?.weekInfo) {
+      fetchData();
+    }
+  }, [subjectId, weekSelector.weekInfo]);
 
   const handleSetTags = (tags: Tag[]) => {
     setTags(tags);
@@ -105,19 +172,41 @@ export const ShiftProvider: FC<{ children: ReactNode }> = ({
     }
   };
 
+  const createShift = async (params: IFetchCreateShift) => {
+    try {
+      const aux = await fetchCreateShift(params);
+      console.log(aux);
+      const key = params.day.replace("-", "");
+      shifts[key] = aux;
+      setShifts((prev) => ({ ...prev, [key]: aux }));
+    } catch (error: any) {
+      alert(error.message);
+    }
+  };
+
   return (
     <ShiftContext.Provider
       value={{
+        loading,
+        ...weekSelector,
+        students,
         scenarios,
+        workdays,
         servicesMap,
         tags,
         associatedTags,
+        shifts,
+        selectedShifts,
+        studentFilter,
         handleSetTags,
         filterServices,
         createTag,
         deleteTag,
         associateTag,
         dissociateTag,
+        createShift,
+        setStudentFilter,
+        setSelectedShifts,
       }}
     >
       {children}

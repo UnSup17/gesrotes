@@ -1,6 +1,10 @@
-import { DayInfo } from "../../util/weekUtils";
+"use client";
 
-export default function Header({ weekInfo }: { weekInfo: DayInfo[] }) {
+import { useShiftContext } from "../../context/ShiftContext";
+
+export default function Header() {
+  const { weekInfo } = useShiftContext();
+  if (!weekInfo) return <></>;
   return (
     <>
       {/* Header */}

@@ -54,6 +54,10 @@ export class EnumImage {
       ariaLabel: "check",
       src: "/svg/check.svg",
     },
+    {
+      ariaLabel: "circleCheck",
+      src: "/svg/circleCheck.svg"
+    },
     // Quitar luego
     {
       ariaLabel: "profilePhotoDemo",

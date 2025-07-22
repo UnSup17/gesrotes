@@ -1,41 +1,16 @@
 "use client";
 
-import Modal from "@/app/components/Modal";
 import { Avatar } from "@/app/components/ui/avatar";
-import { Button } from "@/app/components/ui/button";
-import { EnumImage } from "@/app/model/EnumImage";
-import Image from "next/image";
-import { useParams } from "next/navigation";
 import { Fragment, useEffect, useState } from "react";
-import { useWeekContext } from "../../context/WeekContext";
-import { DayInfo } from "../../util/weekUtils";
-import { AssignTurn } from "../modals/assignTurn";
-import { fetchStudentList } from "./students";
+import { useShiftContext } from "../../context/ShiftContext";
+import { Student } from "../../context/util/students";
+import ShiftCell from "./ShiftCell";
+import TableSkeleton from "./Skeleton";
 
-export interface Student {
-  id: string;
-  fullName: string;
-  avatarUrl?: string;
-}
-
-export default function StudentRows({ weekInfo }: { weekInfo: DayInfo[] }) {
-  const [students, setStudents] = useState<Student[]>();
+export default function StudentRows() {
   const [filteredStudents, setFilteredStudents] = useState<Student[]>([]);
-  const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [isAssignStudentModalOpen, setIsAssignStudentModalOpen] =
-    useState(false);
-
-  const params = useParams();
-  const { studentFilter } = useWeekContext();
-
-  useEffect(() => {
-    async function fetchData() {
-      const aux = await fetchStudentList(+(params.subjectId || ""));
-      setStudents(aux);
-    }
-    fetchData();
-  }, [params.subjectId]);
+  const { loading, students, studentFilter, weekInfo, shifts } =
+    useShiftContext();
 
   useEffect(() => {
     if (students)
@@ -46,16 +21,8 @@ export default function StudentRows({ weekInfo }: { weekInfo: DayInfo[] }) {
       );
   }, [studentFilter, students]);
 
-  const handleOpenAssignStudentModal = (student: Student, date: string) => {
-    setSelectedStudent(student);
-    setSelectedDate(date);
-    setIsAssignStudentModalOpen(true);
-  };
-
-  const plusCircleIcon = EnumImage.getImage("plusCircle");
-
-  if (students?.length === 0) {
-    return <>No existen estudiantes registrados</>;
+  if (loading || weekInfo.length === 0) {
+    return <TableSkeleton />;
   }
 
   return (
@@ -83,45 +50,19 @@ export default function StudentRows({ weekInfo }: { weekInfo: DayInfo[] }) {
                   weekInfo[index].isHighlighted ? "bg-blue-50" : ""
                 }`}
               >
-                <Button
-                  variant="outline"
-                  size="sm"
-                  className="w-full h-full min-h-[100px] border-dashed"
-                  onClick={() =>
-                    handleOpenAssignStudentModal(
-                      student,
-                      weekInfo[index].description
-                    )
-                  }
-                >
-                  <div className="flex flex-col items-center gap-2 text-gray-500">
-                    <Image
-                      alt={plusCircleIcon.ariaLabel}
-                      src={plusCircleIcon.src}
-                      width={30}
-                      height={30}
-                    />
-                    <span className="text-xs">Sin asignar</span>
-                  </div>
-                </Button>
+                <ShiftCell
+                  {...{
+                    student,
+                    date: weekInfo[index].calendarDate,
+                    shifts: shifts[weekInfo[index].id]?.filter(
+                      (item) => item?.idestudiante === +student?.id
+                    ),
+                  }}
+                />
               </div>
             ))}
         </Fragment>
       ))}
-      {isAssignStudentModalOpen && selectedStudent && (
-        <Modal
-          title="GESTIONAR TURNO"
-          handleClose={() => {
-            console.log("close");
-            setIsAssignStudentModalOpen(false);
-          }}
-        >
-          <AssignTurn
-            studentName={`${selectedStudent.fullName} - ${selectedStudent.id}`}
-            selectedDate={`${selectedDate}`}
-          />
-        </Modal>
-      )}
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { useWeekContext } from "@/app/(pages)/subjects/(pages)/[subjectId]/shifts/context/WeekContext";
+import { useShiftContext } from "@/app/(pages)/subjects/(pages)/[subjectId]/shifts/context/ShiftContext";
 import {
   IWeekSelector,
   IWeekSelectorHandler,
@@ -16,7 +16,7 @@ export default function GeneralPreview({
   handleWeekSelection,
   setAuxWeekNumber,
 }: IGeneralPreview) {
-  const { handleNextWeek, handlePreviousWeek } = useWeekContext();
+  const { handleNextWeek, handlePreviousWeek } = useShiftContext();
   return (
     <div className="w-full h-full flex place-content-evenly">
       <button
