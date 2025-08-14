@@ -1,4 +1,4 @@
-"use cliet";
+"use client";
 
 import { useParams } from "next/navigation";
 import {
@@ -175,10 +175,12 @@ export const ShiftProvider: FC<{ children: ReactNode }> = ({
   const createShift = async (params: IFetchCreateShift) => {
     try {
       const aux = await fetchCreateShift(params);
-      console.log(aux);
-      const key = params.day.replace("-", "");
-      shifts[key] = aux;
-      setShifts((prev) => ({ ...prev, [key]: aux }));
+      const key = params.day.replaceAll("-", "");
+      setShifts((prev) => ({
+        ...prev,
+        [key]: [...(prev[key] || []), ...aux],
+      }));
+      alert("Turno creado");
     } catch (error: any) {
       alert(error.message);
     }

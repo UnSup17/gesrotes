@@ -6,7 +6,9 @@ interface IFetchData {
   body?: any;
 }
 export async function fetchData({ specificEndpoint, init, body }: IFetchData): Promise<Response> {
-  const aux = fetch(`${process.env.API_URL}/${specificEndpoint}`, {
+  const url = `${process.env.API_URL}/${specificEndpoint}`;
+  console.log(`Requesting: ${url}, body: ${body}`);
+  const aux = fetch(url, {
     ...init, body
   }
   );

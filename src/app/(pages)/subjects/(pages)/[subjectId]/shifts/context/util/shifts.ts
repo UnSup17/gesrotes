@@ -59,9 +59,13 @@ export async function fetchCreateShift({ day, workingDay, tag, student, classGro
 
   const json = await response.json();
   return json.data.map((item: any) => ({
-    id: item.id,
-    tag: item.etiqueta,
-    scenario: item.escenario,
-    idScenario: item.idEscenario,
+    estudiante: item.estudiante,
+    escenario: item.escenario,
+    etiqueta: item.etiqueta,
+    horario: item.horario,
+    jornada: item.jornada,
+    alimentaciones: item.alimentaciones,
+    idestudiante: +item.idestudiante,
+    idturno: +item.idturno,
   }));
 }

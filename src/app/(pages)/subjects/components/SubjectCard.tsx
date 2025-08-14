@@ -9,8 +9,8 @@ export interface ISubjectCard {
 export default function SubjectCard({ id, title, program }: ISubjectCard) {
   return (
     <div className="rounded-b-lg bg-[#092167] shadow-lg shadow-[#092167] text-white">
-      <div className="items-center text-center p-3 flex flex-col">
-        <span className="overflow-hidden whitespace-nowrap">{title}</span>
+      <div className="items-center text-center p-3 flex flex-col w-full">
+        <span className="overflow-hidden text-wrap h-12">{title}</span>
         <span className="italic text-xs">{program}</span>
       </div>
       <div className="bg-white h-10 border-b"></div>
