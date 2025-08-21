@@ -1,36 +1,48 @@
 "use client";
-import { use } from "react";
 
 import Link from "next/link";
-import { redirect, usePathname } from "next/navigation";
+import { useEffect } from "react";
+import { useParams, usePathname, useRouter } from "next/navigation";
 
-export interface ISubjectMenu {
+interface ISubjectMenu {
   label: string;
   to: string;
 }
-export default function SubjectSelectedLayout(props: {
+
+export default function SubjectSelectedLayout({
+  children,
+}: {
   children: React.ReactNode;
-  params: Promise<{
-    subjectId: number;
-  }>;
 }) {
-  const params = use(props.params);
-
-  const { children } = props;
-
   const pathname = usePathname();
-  if (!params.subjectId) redirect("/");
+  const router = useRouter();
+  const params = useParams<{ subjectId: string }>();
 
-  const menus = getSubjectMenus(params.subjectId);
+  const subjectId = Number(params?.subjectId);
+
+  useEffect(() => {
+    if (!subjectId || Number.isNaN(subjectId)) {
+      router.replace("/");
+    }
+  }, [subjectId, router]);
+
+  const menus = getSubjectMenus(subjectId);
+
   return (
     <section className="flex flex-col h-full">
-      <section className={`pb-2 grid grid-flow-col grid-cols-${menus.length}`}>
+      {/* Evita clases dinámicas de Tailwind (grid-cols-X). Define columnas vía style. */}
+      <section
+        className="pb-2 grid"
+        style={{
+          gridTemplateColumns: `repeat(${menus.length}, minmax(0, 1fr))`,
+        }}
+      >
         {menus.map((menu, index) => (
           <div key={index} className="text-center">
             <Link
               href={menu.to}
               className={`px-12 pt-4 pb-6 ${
-                pathname === menu.to && "bg-[#F7F7F7] rounded-t-3xl"
+                pathname === menu.to ? "bg-[#F7F7F7] rounded-t-3xl" : ""
               }`}
             >
               {menu.label}
@@ -38,6 +50,7 @@ export default function SubjectSelectedLayout(props: {
           </div>
         ))}
       </section>
+
       <section className="bg-[#F7F7F7] flex-1 border mt-2 rounded-3xl font-light text-sm">
         {children}
       </section>
@@ -45,27 +58,14 @@ export default function SubjectSelectedLayout(props: {
   );
 }
 
-export const getSubjectMenus = (subjectId: number): ISubjectMenu[] => {
+// OJO: sin 'export'. Si quieres reutilizar, muévelo a, por ejemplo, src/lib/subjectMenus.ts
+function getSubjectMenus(subjectId: number): ISubjectMenu[] {
+  const sid = String(subjectId);
   return [
-    {
-      label: "Estudiantes",
-      to: `/subjects/${subjectId}/students`,
-    },
-    {
-      label: "Profesores",
-      to: `/subjects/${subjectId}/teachers`,
-    },
-    {
-      label: "Rotes",
-      to: `/subjects/${subjectId}/rotations`,
-    },
-    {
-      label: "Turnos",
-      to: `/subjects/${subjectId}/shifts`,
-    },
-    {
-      label: "Documentos",
-      to: `/subjects/${subjectId}/documents`,
-    },
+    { label: "Estudiantes", to: `/subjects/${sid}/students` },
+    { label: "Profesores", to: `/subjects/${sid}/teachers` },
+    { label: "Rotes", to: `/subjects/${sid}/rotations` },
+    { label: "Turnos", to: `/subjects/${sid}/shifts` },
+    { label: "Documentos", to: `/subjects/${sid}/documents` },
   ];
-};
+}

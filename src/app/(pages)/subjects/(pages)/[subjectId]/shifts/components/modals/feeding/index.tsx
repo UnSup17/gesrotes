@@ -14,32 +14,25 @@ interface Student {
 export function FeedingManager() {
   const students: Student[] = [
     {
-      name: "Aguirre Chilito Juan Sebastian",
+      name: "NAZLY YASMIN BASTIDAS BENAVIDEZ",
       breakfast: true,
       lunch: true,
       dinner: true,
       schedule: "6:30 a.m. a 9:30 p.m.",
     },
     {
-      name: "Bravo Londoño Jonatan David",
+      name: "JUAN FELIPE TOMBÉ TUNUBALÁ",
       breakfast: true,
       lunch: false,
       dinner: true,
       schedule: "6:30 a.m. a 11:30 a.m. y 2:00a.m. a 9:00 p.m.",
     },
     {
-      name: "Gaviria Ortega Yulieth Alexandra",
+      name: "SANTIAGO GONZALEZ GAVIRIA",
       breakfast: true,
       lunch: true,
       dinner: false,
       schedule: "6:30 a.m. a 2:30 p.m.",
-    },
-    {
-      name: "Mejía Mendoza Karen Lizeth",
-      breakfast: false,
-      lunch: true,
-      dinner: true,
-      schedule: "11:30 a.m. a 9:30 p.m.",
     },
   ];
 
@@ -51,13 +44,13 @@ export function FeedingManager() {
       {/* Date header */}
       <div className="flex justify-center gap-4">
         <div className="bg-[#0A2167] text-white px-4 py-1 rounded">
-          MES: NOVIEMBRE
+          MES: AGOSTO
         </div>
         <div className="bg-[#0A2167] text-white px-4 py-1 rounded">
-          AÑO: 2022
+          AÑO: 2024
         </div>
         <div className="bg-[#0A2167] text-white px-4 py-1 rounded">
-          DÍA: 2 / MIÉRCOLES
+          DÍA: 21 / JUEVES
         </div>
       </div>
 

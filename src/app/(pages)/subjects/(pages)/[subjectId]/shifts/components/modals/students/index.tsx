@@ -16,18 +16,211 @@ export function StudentManager() {
   );
   const [searchTerm, setSearchTerm] = useState("");
   const [students, setStudents] = useState<Student[]>([
-    { id: "1", name: "Juan Sebastian Aguirre Chilito", selected: true },
-    { id: "2", name: "Héctor Esteban Coral Ruiz", selected: false },
-    { id: "3", name: "Karen Lizeth Mejia Mendoza", selected: true },
-    { id: "4", name: "Maria Fernanda Ordoñez Imbachi", selected: false },
-    { id: "5", name: "Juan Camilo Ramirez Paz", selected: false },
-    { id: "6", name: "Yulieth Alexandra Gaviria Ortega", selected: true },
-    { id: "7", name: "Gonzalo Andres Muñoz Gomez", selected: true },
-    { id: "8", name: "Jonatan David Bravo Londoño", selected: true },
-    { id: "9", name: "Jefferson Eduardo Campo", selected: false },
-    { id: "10", name: "Richard Amilson Anacona Ibarra", selected: true },
-    { id: "11", name: "Danny Alberto Díaz Mage", selected: false },
-    { id: "12", name: "Jorge Ivan Solano", selected: false },
+    {
+      id: "NAZLY YASMIN BASTIDAS BENAVIDEZ",
+      name: "NAZLY YASMIN BASTIDAS BENAVIDEZ",
+      selected: true,
+    },
+    {
+      id: "JUAN FELIPE TOMBÉ TUNUBALÁ",
+      name: "JUAN FELIPE TOMBÉ TUNUBALÁ",
+      selected: true,
+    },
+    {
+      id: "SANTIAGO  GONZALEZ GAVIRIA",
+      name: "SANTIAGO  GONZALEZ GAVIRIA",
+      selected: true,
+    },
+    {
+      id: "MARIA ALEJANDRA CRUZ JIMENEZ",
+      name: "MARIA ALEJANDRA CRUZ JIMENEZ",
+      selected: true,
+    },
+    {
+      id: "MARIO ALEJANDRO MURCIA RUIZ",
+      name: "MARIO ALEJANDRO MURCIA RUIZ",
+      selected: true,
+    },
+    {
+      id: "VALENTINA  BUENO MARTINEZ",
+      name: "VALENTINA  BUENO MARTINEZ",
+      selected: true,
+    },
+    {
+      id: "BLANCA ELVIRA TEZ GETIAL",
+      name: "BLANCA ELVIRA TEZ GETIAL",
+      selected: true,
+    },
+    {
+      id: "DIANA ISABEL ERAZO NAVIA",
+      name: "DIANA ISABEL ERAZO NAVIA",
+      selected: true,
+    },
+    {
+      id: "GABRIELA  LANDAZURY MUÑOZ",
+      name: "GABRIELA  LANDAZURY MUÑOZ",
+      selected: true,
+    },
+    {
+      id: "MARÍA PAULA HOYOS JIMÉNEZ",
+      name: "MARÍA PAULA HOYOS JIMÉNEZ",
+      selected: true,
+    },
+    {
+      id: "ALEIDA BELIANA GUAMIALAMAG IMBACUAN",
+      name: "ALEIDA BELIANA GUAMIALAMAG IMBACUAN",
+      selected: true,
+    },
+    {
+      id: "JAZZMIN ADRIANA MUELAS MORALES",
+      name: "JAZZMIN ADRIANA MUELAS MORALES",
+      selected: true,
+    },
+    {
+      id: "JUAN CRISTOBAL ORTIZ RUIZ",
+      name: "JUAN CRISTOBAL ORTIZ RUIZ",
+      selected: true,
+    },
+    {
+      id: "LEYSLY MARIANA GUZMÁN CRUZ",
+      name: "LEYSLY MARIANA GUZMÁN CRUZ",
+      selected: true,
+    },
+    {
+      id: "ELENA  ORTIZ CALVACHE",
+      name: "ELENA  ORTIZ CALVACHE",
+      selected: true,
+    },
+    {
+      id: "FABIAN ALEXIS GARZÓN PAREDES",
+      name: "FABIAN ALEXIS GARZÓN PAREDES",
+      selected: true,
+    },
+    {
+      id: "LINA MARGARITA YELA LOZA",
+      name: "LINA MARGARITA YELA LOZA",
+      selected: true,
+    },
+    {
+      id: "JHELEN SOFIA QUINTANA FAJARDO",
+      name: "JHELEN SOFIA QUINTANA FAJARDO",
+      selected: true,
+    },
+    {
+      id: "NICOLAS ESTEBAN PAZ CARDONA",
+      name: "NICOLAS ESTEBAN PAZ CARDONA",
+      selected: true,
+    },
+    {
+      id: "NATALIA MARCELA ZAPATA MARTINEZ",
+      name: "NATALIA MARCELA ZAPATA MARTINEZ",
+      selected: true,
+    },
+    {
+      id: "KAREN VANESSA CASTILLO POPAYÁN",
+      name: "KAREN VANESSA CASTILLO POPAYÁN",
+      selected: true,
+    },
+    {
+      id: "INGRID YULIETH BENAVIDES PALECHOR",
+      name: "INGRID YULIETH BENAVIDES PALECHOR",
+      selected: true,
+    },
+    {
+      id: "DAYANA PAOLA ARTEAGA ROSERO",
+      name: "DAYANA PAOLA ARTEAGA ROSERO",
+      selected: true,
+    },
+    {
+      id: "JUAN PABLO MARTINEZ ERAZO",
+      name: "JUAN PABLO MARTINEZ ERAZO",
+      selected: true,
+    },
+    {
+      id: "MIKE ALEJANDRO ESPAÑA CAJAS",
+      name: "MIKE ALEJANDRO ESPAÑA CAJAS",
+      selected: true,
+    },
+    {
+      id: "SEBASTIAN ANDRES GUTIERREZ MOSQUERA",
+      name: "SEBASTIAN ANDRES GUTIERREZ MOSQUERA",
+      selected: true,
+    },
+    {
+      id: "MELANNY YULIANA GUANCHA BRAVO",
+      name: "MELANNY YULIANA GUANCHA BRAVO",
+      selected: true,
+    },
+    {
+      id: "ENAR EDIL MUÑOZ ZUÑIGA",
+      name: "ENAR EDIL MUÑOZ ZUÑIGA",
+      selected: true,
+    },
+    {
+      id: "KEVIN ALEJANDRO MUÑOZ MORALES",
+      name: "KEVIN ALEJANDRO MUÑOZ MORALES",
+      selected: true,
+    },
+    {
+      id: "FRANCY NICOL VELASCO CUASAPUD",
+      name: "FRANCY NICOL VELASCO CUASAPUD",
+      selected: true,
+    },
+    {
+      id: "ESTEBAN HERNAN MUÑOZ OLIVA",
+      name: "ESTEBAN HERNAN MUÑOZ OLIVA",
+      selected: true,
+    },
+    {
+      id: "DARCY JINETH SOLARTE ALTAMIRANO",
+      name: "DARCY JINETH SOLARTE ALTAMIRANO",
+      selected: true,
+    },
+    {
+      id: "LUISA FERNANDA BOLAÑOS ORTEGA",
+      name: "LUISA FERNANDA BOLAÑOS ORTEGA",
+      selected: true,
+    },
+    {
+      id: "LUISA FERNANDA CERON MENESES",
+      name: "LUISA FERNANDA CERON MENESES",
+      selected: true,
+    },
+    {
+      id: "CAMILA ANDREA SOTELO LOPEZ",
+      name: "CAMILA ANDREA SOTELO LOPEZ",
+      selected: true,
+    },
+    {
+      id: "SARA VALENTINA ACOSTA YACUMAL",
+      name: "SARA VALENTINA ACOSTA YACUMAL",
+      selected: true,
+    },
+    {
+      id: "DAYRON SADARI RUIZ CORDOBA",
+      name: "DAYRON SADARI RUIZ CORDOBA",
+      selected: true,
+    },
+    {
+      id: "ISABELLA  LUCUMI VILLEGAS",
+      name: "ISABELLA  LUCUMI VILLEGAS",
+      selected: true,
+    },
+    {
+      id: "ELIZABETH  LOPERA GRUESO",
+      name: "ELIZABETH  LOPERA GRUESO",
+      selected: true,
+    },
+    {
+      id: "TANIA FERNANDA LARA ARTEAGA",
+      name: "TANIA FERNANDA LARA ARTEAGA",
+      selected: true,
+    },
+    {
+      id: "SANTIAGO ESTIVEN HERNANDEZ LOPEZ",
+      name: "SANTIAGO ESTIVEN HERNANDEZ LOPEZ",
+      selected: true,
+    },
   ]);
 
   const filteredStudents = students.filter((student) => {
@@ -77,7 +270,7 @@ export function StudentManager() {
           <input
             type="text"
             placeholder="Buscar estudiante por nombre"
-            className="w-full pl-9 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-32 pl-9 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
